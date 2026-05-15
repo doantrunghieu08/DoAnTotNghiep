@@ -51,7 +51,9 @@ public class SecurityConfig{
         configuration.setAllowedOrigins(List.of(
                 "http://127.0.0.1:5500",
                 "http://localhost:5500",
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "http://103.75.182.246",        // Cổng mặc định của Nginx (80)
+                "http://103.75.182.246:8080"
         ));
         configuration.setAllowedHeaders(List.of(
                 "Authorization", "Content-Type", "X-Requested-With", "Accept", "X-XSRF-TOKEN"
