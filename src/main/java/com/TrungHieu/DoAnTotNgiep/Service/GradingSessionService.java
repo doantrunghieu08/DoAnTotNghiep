@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,7 @@ public class GradingSessionService {
         gradingSession.setTeacher(teacher);
         gradingSession.setGradingMode(request.getGradingMode());
         gradingSession.setStatus(GradingSessionStatus.IN_PROGRESS);
+        gradingSession.setGradedAt(Instant.now());
 
         GradingSession savedSession = gradingSessionRepository.save(gradingSession);
 
