@@ -1,0 +1,86 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-exception: true
+
+  tomcat:
+    threads:
+      max: 500         # Tăng số luồng xử lý đồng thời lên 500
+      min-spare: 50    # Luôn duy trì ít nhất 50 luồng rảnh rỗi
+    max-connections: 10000 # Chấp nhận tối đa 10k kết nối cùng lúc
+    accept-count: 1000     # Hàng đợi cho các request chờ xử lý
+
+jwt:
+  signerKey: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+  expiration: 900000 # 15p của access token
+  refresh-token-expiration: 604800000 # 7 ngày refresh token
+
+
+spring:
+  data:
+    web:
+      pageable:
+        page-parameter-name: page
+        size-parameter-name: size
+      # Chuyển Page sang dạng DTO ổn định cho Frontend
+      page-serialization-mode: via-dto
+
+  datasource:
+    url: jdbc:mysql://210.211.125.205:3306/kbvaamfl_DoAnTotNghiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+    username: kbvaamfl_TrungHieu
+    password: Doanhieu@1
+
+    hikari:
+      maximum-pool-size: 50      # Nâng từ 10 (mặc định) lên 50 để tránh chờ kết nối DB
+      connection-timeout: 30000  # Chờ tối đa 30s để lấy kết nối
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  servlet:
+    multipart:
+      max-file-size: 100MB       # Dung lượng tối đa cho 1 file (ở đây mình set 10MB cho xông xênh)
+      max-request-size: 100MB
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hotro.booingfilmticket@gmail.com
+    password: rvsvidqahczqbgep
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
+cloudinary:
+  cloud-name: dzmepj5y8
+  api-key: 699318649326949
+  api-secret: PSNSslVt2Q6UdgLVh7WICK_vaxs
+

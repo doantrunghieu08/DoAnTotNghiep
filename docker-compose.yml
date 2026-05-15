@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  spring-be:
+    build: .
+    container_name: booking_film_be
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+
+      - SPRING_DATASOURCE_URL=jdbc:mysql://210.211.125.205:3306/kbvaamfl_DoAnTotNghiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+      - SPRING_DATASOURCE_USERNAME=kbvaamfl_TrungHieu
+      - SPRING_DATASOURCE_PASSWORD=Doanhieu@1
+
+
+      - JWT_SIGNER_KEY=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+      - MAIL_USERNAME=hotro.booingfilmticket@gmail.com
+      - MAIL_PASSWORD=rvsvidqahczqbgep
+
+      - CLOUDINARY_NAME=dzmepj5y8
+      - CLOUDINARY_API_KEY=699318649326949
+      - CLOUDINARY_API_SECRET=PSNSslVt2Q6UdgLVh7WICK_vaxs
