@@ -28,9 +28,9 @@ spring:
       page-serialization-mode: via-dto
 
   datasource:
-    url: jdbc:mysql://210.211.125.205:3306/kbvaamfl_DoAnTotNghiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
-    username: kbvaamfl_TrungHieu
-    password: Doanhieu@1
+    url: jdbc:mysql://localhost:3306/kbvaamfl_DoAnTotNghiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: admin # Đặt giống pass docker cho đỡ nhầm
 
     hikari:
       maximum-pool-size: 30     # Nâng từ 10 (mặc định) lên 50 để tránh chờ kết nối DB
