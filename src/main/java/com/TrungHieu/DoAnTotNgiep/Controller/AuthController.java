@@ -51,7 +51,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
-                .maxAge(3600)
+                .maxAge(43200)
                 .sameSite("Lax")
                 .build();
 
@@ -106,7 +106,7 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(false)       // đổi thành true khi deploy HTTPS
                 .path("/")
-                .maxAge(3600)        // khớp với maxAge lúc login
+                .maxAge(43200)        // khớp với maxAge lúc login
                 .sameSite("Lax")
                 .build();
 
