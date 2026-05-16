@@ -14,7 +14,7 @@ server:
 
 jwt:
   signerKey: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
-  expiration: 900000 # 15p của access token
+  expiration: 43200000 # 15p của access token
   refresh-token-expiration: 604800000 # 7 ngày refresh token
 
 
