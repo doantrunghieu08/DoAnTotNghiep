@@ -5,6 +5,7 @@ import com.TrungHieu.DoAnTotNgiep.Enum.GradingSessionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -37,6 +38,9 @@ public class GradingSession {
 
     float finalScore;
 
+
+    @CreatedDate // <--- Tự động cập nhật ngày giờ khi sửa đổi
+    @Column(name = "graded_at")
     Instant gradedAt;
 
     @Enumerated(value = EnumType.STRING)
