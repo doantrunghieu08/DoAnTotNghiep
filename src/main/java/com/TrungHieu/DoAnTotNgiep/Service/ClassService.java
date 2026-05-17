@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.security.PublicKey;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,8 @@ public class ClassService {
         classes.setRoomNumber(request.getRoomNumber());
 
         classes.setTeacher(null);
+
+        classes.setCreatedAt(LocalDateTime.now());
         classRepository.save(classes);
         ClassResponse classResponse = classMapper.toResponse(classes);
         return new ApiResponse<>(201, "Thêm lớp học thành công", classResponse);

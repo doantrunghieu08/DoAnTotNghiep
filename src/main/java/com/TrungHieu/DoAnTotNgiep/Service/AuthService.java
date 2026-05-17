@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
@@ -77,6 +78,7 @@ public class AuthService {
         user.setStatus(request.getStatusType());
         user.setAvatarImage(request.getAvatarImage());
         user.setIsRequirePasswordChange(false);
+        user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
         UserResponse userResponse = userMapper.toResponse(user);

@@ -41,6 +41,7 @@ public class ErrorTypeService {
         errorType.setSeverity(request.getSeverityType());
         errorType.setDeduction(request.getDeduction());
         errorType.setActive(true);
+
         errorTypeRepository.save(errorType);
         return new ApiResponse<>(201, "Them loi thanh cong", errorMapper.toResponse(errorType));
 
