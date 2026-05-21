@@ -14,7 +14,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,16 +52,22 @@ public class AiIntegrationService {
             allowedErrors.add(dto);
         }
 
-        // 4. Đóng gói dữ liệu bài làm và danh sách lỗi từ DB
+
         AiGradingRequest requestPayload = new AiGradingRequest(videoUrl, allowedErrors);
 
         try {
-            // 5. Bắn request sang ngrok, nhận về chuỗi JSON kết quả từ Python
-            return restTemplate.postForObject(AI_SERVICE_URL, requestPayload, String.class);
+
+            URI targetUri = UriComponentsBuilder.fromHttpUrl(AI_SERVICE_URL)
+                    .path("/api/ai/grade-video")
+                    .build()
+                    .toUri();
+
+
+            return restTemplate.postForObject(targetUri, requestPayload, String.class);
         } catch (Exception e) {
-            // Ghi log lỗi nếu không kết nối được ngrok hoặc AI bị sập
+       
             e.printStackTrace();
-            throw new AppException(ErrorCode.AI_SERVICE_ERROR); // Hoặc trả về chuỗi báo lỗi tùy bạn cấu hình
+            throw new AppException(ErrorCode.AI_SERVICE_ERROR);
         }
     }
 }
