@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AiIntegrationService {
-    String AI_SERVICE_URL = "https://stung-ceremony-charity.ngrok-free.dev/api/ai/grade-video";
+    String AI_SERVICE_URL = "https://stung-ceremony-charity.ngrok-free.dev";
     ErrorTypeRepository errorTypeRepository;
     UserRepository userRepository;
 
@@ -65,7 +65,7 @@ public class AiIntegrationService {
 
             return restTemplate.postForObject(targetUri, requestPayload, String.class);
         } catch (Exception e) {
-       
+
             e.printStackTrace();
             throw new AppException(ErrorCode.AI_SERVICE_ERROR);
         }
