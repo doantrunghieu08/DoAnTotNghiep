@@ -32,7 +32,6 @@ public interface GradingSessionRepository extends JpaRepository<GradingSession, 
     );
 
 
-    // teacher là User object, nên dùng teacher.id
     List<GradingSession> findByTeacher_IdOrderByIdDesc(String teacherId);
 
     // Fetch join tránh N+1 — dùng trong service

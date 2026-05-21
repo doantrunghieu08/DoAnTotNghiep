@@ -2,6 +2,7 @@ package com.TrungHieu.DoAnTotNgiep.Controller;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubissionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
+import com.TrungHieu.DoAnTotNgiep.Service.AiIntegrationService;
 import com.TrungHieu.DoAnTotNgiep.Service.StudentSubmissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubmissionController {
     StudentSubmissionService studentSubmissionService;
+    AiIntegrationService aiIntegrationService;
 
     @PostMapping("/student/submission")
     public ResponseEntity<ApiResponse<StudentSubmissionResponse>> creationSubmission(@RequestBody CreationSubissionRequest request){
@@ -64,4 +66,17 @@ public class SubmissionController {
     public ResponseEntity<ApiResponse<Page<SubmissionGradeDTO>>> getMyExam(@PathVariable String idStudent, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         return ResponseEntity.ok(studentSubmissionService.getMyExams(idStudent, page, size));
     }
+
+    @PostMapping("/teacher/grade")
+    public ResponseEntity<String> gradeStudentVideo(
+            @RequestParam String idTeacher,
+            @RequestParam String videoUrl
+    ) {
+        // Gọi sang trạm AI local qua dịch vụ Service bạn vừa viết
+        String aiResultJson = aiIntegrationService.callPythonAiService(idTeacher, videoUrl);
+
+        // Trả chuỗi JSON nhận xét + điểm số từ AI về lại cho Client hiển thị/kiểm thử
+        return ResponseEntity.ok(aiResultJson);
+    }
+
 }

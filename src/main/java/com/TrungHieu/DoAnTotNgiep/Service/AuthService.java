@@ -70,15 +70,12 @@ public class AuthService {
 //        }
         user.setIsRequirePasswordChange(false);
         user.setRole(request.getRole());
-
-
         user.setBirthday(request.getBirthday());
         user.setEmail(request.getEmail());
         user.setGender(request.getGender());
         user.setStatus(request.getStatusType());
         user.setAvatarImage(request.getAvatarImage());
         user.setIsRequirePasswordChange(false);
-
 
         userRepository.save(user);
         UserResponse userResponse = userMapper.toResponse(user);

@@ -31,6 +31,8 @@ public enum ErrorCode {
     // ---Grading Session Buisness Logic (4xxx) ---
     SESSION_ALREADY_FINALIZED(4001, "Grading session is finalized", HttpStatus.CONFLICT),
 
+    // -- AI Service Logs
+    AI_SERVICE_ERROR(5000, "Setting is not correctly", HttpStatus.BAD_REQUEST)
     ;
 
     private final int code;
