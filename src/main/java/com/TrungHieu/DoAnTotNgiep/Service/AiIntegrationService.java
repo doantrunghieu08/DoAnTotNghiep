@@ -31,8 +31,8 @@ public class AiIntegrationService {
     public String callPythonAiService(String idTeacher, String videoUrl) {
         // 1. Cấu hình RestTemplate kiên nhẫn chờ AI local xử lý trong 60 giây
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(10000);   // Chờ kết nối đến ngrok tối đa 5 giây
-        requestFactory.setReadTimeout(180000);     // Chờ AI tính toán và trả kết quả tối đa 60 giây
+        requestFactory.setConnectTimeout(15000);   // Chờ kết nối đến ngrok tối đa 5 giây
+        requestFactory.setReadTimeout(300000);     // Chờ AI tính toán và trả kết quả tối đa 60 giây
 
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
