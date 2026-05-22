@@ -28,7 +28,7 @@ spring:
       page-serialization-mode: via-dto
 
   datasource:
-    url: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
     username: root
     password: admin # Đặt giống pass docker cho đỡ nhầm
 
