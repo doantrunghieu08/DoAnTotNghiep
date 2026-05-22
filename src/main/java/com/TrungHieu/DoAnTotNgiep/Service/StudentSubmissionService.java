@@ -1,6 +1,6 @@
 package com.TrungHieu.DoAnTotNgiep.Service;
 
-import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubissionRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubmissionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
 import com.TrungHieu.DoAnTotNgiep.Entity.ClassExam;
 import com.TrungHieu.DoAnTotNgiep.Entity.GradingSession;
@@ -38,7 +38,7 @@ public class StudentSubmissionService {
     StudentSubmissionMapper studentSubmissionMapper;
     GradingSessionRepository sessionRepository;
 
-    public ApiResponse<StudentSubmissionResponse> createSubmission(CreationSubissionRequest request) {
+    public ApiResponse<StudentSubmissionResponse> createSubmission(CreationSubmissionRequest request) {
 
         User student = userRepository.findById(request.getIdStudent())
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -165,5 +165,38 @@ public class StudentSubmissionService {
                 .message("Lấy danh sách bài thi thành công")
                 .data(myExams)
                 .build();
+    }
+
+    public ApiResponse<StudentSubmissionResponse> uploadStudentVideo(
+            CreationSubmissionRequest request) {
+
+        // Tìm submission hiện có theo classExamId + studentId
+        StudentSubmission submission = submissionRepository
+                .findByClassExamIdAndStudentId(request.getIdClassExam(), request.getIdStudent())
+                .orElseGet(() -> {
+                    // Chưa có → tạo mới
+                    ClassExam classExam = classExamRepository.findById(request.getIdClassExam())
+                            .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+                    User student = userRepository.findById(request.getIdStudent())
+                            .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+                    StudentSubmission newSub = new StudentSubmission();
+                    newSub.setClassExam(classExam);
+                    newSub.setStudent(student);
+                    return newSub;
+                });
+
+        if (request.getVideoUrl1() != null) {
+            submission.setVideoUrl1(request.getVideoUrl1());
+            submission.setFileSizeBytes1(request.getFileSizeBytes1());
+        }
+        if (request.getVideoUrl2() != null) {
+            submission.setVideoUrl2(request.getVideoUrl2());
+            submission.setFileSizeBytes2(request.getFileSizeBytes2());
+        }
+        submission.setStatus(SubmittedStatus.SUBMITTED);
+        submissionRepository.save(submission);
+
+        return new ApiResponse<>(200, "Tải bài thi của sinh viên thành công",
+                studentSubmissionMapper.toResponse(submission));
     }
 }

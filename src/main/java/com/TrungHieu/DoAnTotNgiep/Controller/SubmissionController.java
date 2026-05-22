@@ -1,6 +1,6 @@
 package com.TrungHieu.DoAnTotNgiep.Controller;
 
-import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubissionRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubmissionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
 import com.TrungHieu.DoAnTotNgiep.Service.AiIntegrationService;
 import com.TrungHieu.DoAnTotNgiep.Service.StudentSubmissionService;
@@ -21,7 +21,7 @@ public class SubmissionController {
     AiIntegrationService aiIntegrationService;
 
     @PostMapping("/student/submission")
-    public ResponseEntity<ApiResponse<StudentSubmissionResponse>> creationSubmission(@RequestBody CreationSubissionRequest request){
+    public ResponseEntity<ApiResponse<StudentSubmissionResponse>> creationSubmission(@RequestBody CreationSubmissionRequest request){
         return ResponseEntity.ok(studentSubmissionService.createSubmission(request));
     }
 
@@ -77,6 +77,11 @@ public class SubmissionController {
 
         // Trả chuỗi JSON nhận xét + điểm số từ AI về lại cho Client hiển thị/kiểm thử
         return ResponseEntity.ok(aiResultJson);
+    }
+
+    @PostMapping("teacher/submission/{submissionId}/upload-video")
+    public ResponseEntity<ApiResponse<StudentSubmissionResponse>> uploadStudentVideo(@PathVariable int submissionId, @RequestBody CreationSubmissionRequest request){
+        return ResponseEntity.ok(studentSubmissionService.uploadStudentVideo(request));
     }
 
 }

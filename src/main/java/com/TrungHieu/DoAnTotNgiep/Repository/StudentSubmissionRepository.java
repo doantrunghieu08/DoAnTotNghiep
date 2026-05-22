@@ -58,4 +58,5 @@ public interface StudentSubmissionRepository extends JpaRepository<StudentSubmis
             countQuery = "SELECT COUNT(s) FROM StudentSubmission s WHERE s.student.id = :studentId")
     Page<SubmissionGradeDTO> getMyGradeBoardByStringId(@Param("studentId") String studentId, Pageable pageable);
 
+    Optional<StudentSubmission> findByClassExamIdAndStudentId(Integer classExamId, String studentId);
 }
