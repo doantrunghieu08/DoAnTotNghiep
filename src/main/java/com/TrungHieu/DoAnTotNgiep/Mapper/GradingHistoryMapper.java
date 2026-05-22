@@ -24,7 +24,7 @@ public interface GradingHistoryMapper {
     @Mapping(source = "submission.student.fullName",                 target = "studentName")
     @Mapping(source = "submission.classExam.classes.id",             target = "classId")
     @Mapping(source = "submission.classExam.classes.className",      target = "className")
-    @Mapping(source = "submission.classExam.examType.name",          target = "examName")
+    @Mapping(source = "submission.classExam.exam.name",          target = "examName")
     @Mapping(source = "gradingMode",                                 target = "gradingMode")
     @Mapping(source = "totalDeduction",                              target = "totalDeductions")
     @Mapping(source = "finalScore",                                  target = "finalScore")

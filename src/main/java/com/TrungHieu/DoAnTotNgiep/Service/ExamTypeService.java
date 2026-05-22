@@ -23,5 +23,5 @@ public class ExamTypeService {
         return new ApiResponse<>(200, "Thêm loại bài thi thành công", examType);
     }
 
-    
+
 }

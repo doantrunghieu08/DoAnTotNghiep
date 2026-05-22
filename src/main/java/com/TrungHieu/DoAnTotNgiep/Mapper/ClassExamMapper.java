@@ -9,12 +9,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {ExamMapper.class})
 public interface ClassExamMapper {
     @Mapping(target = "idClass", source = "classes.id")
-    @Mapping(target = "idExam", source = "examType.id")
+    @Mapping(target = "idExam", source = "exam.id")
     public ClassExamResponse toResponse(ClassExam classExam);
 
     @Mapping(target = "idClass", source = "classes.id")
 
-    @Mapping(target = "examTypeResponse", source = "examType")
+    @Mapping(target = "examTypeResponse", source = "exam")
 
     @Mapping(target = "submissionDeadline", source = "submissionDeadline")
 
