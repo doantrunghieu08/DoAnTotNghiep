@@ -31,7 +31,7 @@ public class Exam {
             @JoinColumn(name = "teacher_id")
     User teacher;
 
-    @OneToMany(mappedBy = "examType")
+    @OneToMany(mappedBy = "exam")
     List<ClassExam> classExams;
 
     @ManyToOne
