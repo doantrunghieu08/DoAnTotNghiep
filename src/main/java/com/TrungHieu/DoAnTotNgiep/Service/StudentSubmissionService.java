@@ -167,21 +167,17 @@ public class StudentSubmissionService {
                 .build();
     }
 
-    public ApiResponse<StudentSubmissionResponse> uploadStudentVideo(
-            CreationSubmissionRequest request) {
-
-        // Tìm submission hiện có theo classExamId + studentId
+    public ApiResponse<StudentSubmissionResponse> uploadStudentVideo(CreationSubmissionRequest request) {
         StudentSubmission submission = submissionRepository
                 .findByClassExamIdAndStudentId(request.getIdClassExam(), request.getIdStudent())
                 .orElseGet(() -> {
-                    // Chưa có → tạo mới
-                    ClassExam classExam = classExamRepository.findById(request.getIdClassExam())
-                            .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
-                    User student = userRepository.findById(request.getIdStudent())
-                            .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
                     StudentSubmission newSub = new StudentSubmission();
+                    ClassExam classExam = classExamRepository.findById(request.getIdClassExam()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
                     newSub.setClassExam(classExam);
+                    User student = userRepository.findById(request.getIdStudent()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
                     newSub.setStudent(student);
+                    newSub.setStatus(SubmittedStatus.SUBMITTED);
+                    newSub.setSubmittedAt(LocalDateTime.now());
                     return newSub;
                 });
 
@@ -193,10 +189,10 @@ public class StudentSubmissionService {
             submission.setVideoUrl2(request.getVideoUrl2());
             submission.setFileSizeBytes2(request.getFileSizeBytes2());
         }
-        submission.setStatus(SubmittedStatus.SUBMITTED);
-        submissionRepository.save(submission);
 
-        return new ApiResponse<>(200, "Tải bài thi của sinh viên thành công",
-                studentSubmissionMapper.toResponse(submission));
+
+        StudentSubmission saved = submissionRepository.save(submission);
+        return new ApiResponse<>(200, "Nop bai thi thanh cong" ,studentSubmissionMapper.toResponse(saved));
+    }
     }
 }
