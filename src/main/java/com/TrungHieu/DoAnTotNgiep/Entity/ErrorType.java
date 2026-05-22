@@ -8,7 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -40,4 +43,12 @@ public class ErrorType {
 
     @OneToMany(mappedBy = "errorType")
     List<GradingError> gradingErrors;
+
+    @CreatedDate // <--- Tự động điền ngày giờ khi tạo mới
+    @Column(name = "created_at", updatable = false, nullable = false)
+    LocalDateTime createdAt;
+
+    @LastModifiedDate // <--- Tự động cập nhật ngày giờ khi sửa đổi
+    @Column(name = "updated_at")
+    LocalDateTime updatedAt;
 }

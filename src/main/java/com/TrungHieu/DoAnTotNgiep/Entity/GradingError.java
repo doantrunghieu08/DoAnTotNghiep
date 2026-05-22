@@ -3,8 +3,11 @@ package com.TrungHieu.DoAnTotNgiep.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "grading_errors")
@@ -34,4 +37,11 @@ public class GradingError {
 
     String notes;
 
+    @CreatedDate // <--- Tự động điền ngày giờ khi tạo mới
+    @Column(name = "created_at", updatable = false, nullable = false)
+    LocalDateTime createdAt;
+
+    @LastModifiedDate // <--- Tự động cập nhật ngày giờ khi sửa đổi
+    @Column(name = "updated_at")
+    LocalDateTime updatedAt;
 }
