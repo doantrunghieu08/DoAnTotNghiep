@@ -17,7 +17,7 @@ public interface GradingHistoryMapper {
     @Mapping(target = "submissionId",
             expression = "java(session.getSubmission() != null ? String.valueOf(session.getSubmission().getId()) : null)")
     @Mapping(target = "examId",
-            expression = "java(session.getSubmission() != null && session.getSubmission().getClassExam() != null && session.getSubmission().getClassExam().getExamType() != null ? String.valueOf(session.getSubmission().getClassExam().getExamType().getId()) : null)")
+            expression = "java(session.getSubmission() != null && session.getSubmission().getClassExam() != null && session.getSubmission().getClassExam().getExam() != null ? String.valueOf(session.getSubmission().getClassExam().getExam().getId()) : null)")
     @Mapping(source = "teacher.id",                                  target = "teacherId")
     @Mapping(source = "teacher.fullName",                            target = "teacherName")
     @Mapping(source = "submission.student.id",                       target = "studentCode")
