@@ -76,8 +76,10 @@ spring:
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.jdbc.datasource: DEBUG
+    org.hibernate.orm.jdbc.connections: DEBUG
 
 cloudinary:
   cloud-name: dzmepj5y8
