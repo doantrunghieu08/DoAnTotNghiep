@@ -94,7 +94,7 @@ public class ClassExamService {
     @Transactional
     public ApiResponse<ClassExamResponse> restoreExam(String idClass, int idExam) {
         // 1. Tìm bản ghi (đảm bảo đã xóa @Where trong Entity)
-        ClassExam classExam = classExamRepository.findByClasses_IdAndExamType_Id(idClass, idExam)
+        ClassExam classExam = classExamRepository.findByClasses_IdAndExam_Id(idClass, idExam)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
 
         // 2. Kiểm tra trạng thái

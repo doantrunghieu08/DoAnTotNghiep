@@ -19,11 +19,11 @@ public interface ClassExamRepository extends JpaRepository<ClassExam, Integer> {
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
-    @Query(value = "UPDATE class_exams SET is_deleted = 1 WHERE class_id = :idClass AND exam_type_id = :idExam", nativeQuery = true)
+    @Query(value = "UPDATE class_exams SET is_deleted = 1 WHERE class_id = :idClass AND exam_id = :idExam", nativeQuery = true)
     void deleteExamByClassIdAndExamId(@Param("idClass") String idClass, @Param("idExam") int idExam);
 
-    @Query(value = "SELECT * FROM class_exams WHERE class_id = :#{#classes.id} AND exam_type_id = :#{#examType.id}", nativeQuery = true)
-    Optional<ClassExam> findByClassesAndExamType(@Param("classes") Classes classes, @Param("examType") Exam exam);
+    @Query(value = "SELECT * FROM class_exams WHERE class_id = :#{#classes.id} AND exam_id = :#{#exam.id}", nativeQuery = true)
+    Optional<ClassExam> findByClassesAndExam(@Param("classes") Classes classes, @Param("exam") Exam exam);
 
     // Lấy danh sách bài thi đang hoạt động (isDeleted = false)
     Page<ClassExam> findByClasses_IdAndIsDeletedFalse(String classId, Pageable pageable);
@@ -32,5 +32,5 @@ public interface ClassExamRepository extends JpaRepository<ClassExam, Integer> {
     Page<ClassExam> findByClasses_IdAndIsDeletedTrue(String classId, Pageable pageable);
 
     // Tìm kiếm để khôi phục
-    Optional<ClassExam> findByClasses_IdAndExamType_Id(String classId, int examId);
+    Optional<ClassExam> findByClasses_IdAndExam_Id(String classId, int examId);
 }
