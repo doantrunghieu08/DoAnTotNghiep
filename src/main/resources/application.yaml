@@ -1,22 +1,20 @@
 server:
-  port: ${PORT:8080}
+  port: 8080
   error:
     include-message: always
     include-binding-errors: always
     include-exception: true
-
   tomcat:
     threads:
-      max: 50         # Tăng số luồng xử lý đồng thời lên 50
-      min-spare: 10    # Luôn duy trì ít nhất 10 luồng rảnh rỗi
-    max-connections: 2000 # Chấp nhận tối đa 2000 kết nối cùng lúc
-    accept-count: 100     # Hàng đợi cho các request chờ xử lý
+      max: 50
+      min-spare: 10
+    max-connections: 2000
+    accept-count: 100
 
 jwt:
   signerKey: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
-  expiration: 43200000 # 15p của access token
-  refresh-token-expiration: 604800000 # 7 ngày refresh token
-
+  expiration: 43200000
+  refresh-token-expiration: 604800000
 
 spring:
   data:
@@ -24,41 +22,42 @@ spring:
       pageable:
         page-parameter-name: page
         size-parameter-name: size
-      # Chuyển Page sang dạng DTO ổn định cho Frontend
       page-serialization-mode: via-dto
 
   datasource:
+    # URL kết nối tới service mysql trong docker
     url: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
     username: root
-    password: admin # Đặt giống pass docker cho đỡ nhầm
-
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 30     # Nâng từ 10 (mặc định) lên 50 để tránh chờ kết nối DB
-      connection-timeout: 30000  # Chờ tối đa 30s để lấy kết nối
+      maximum-pool-size: 30
+      connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
 
   servlet:
     multipart:
-      max-file-size: 100MB       # Dung lượng tối đa cho 1 file (ở đây mình set 10MB cho xông xênh)
+      max-file-size: 100MB
       max-request-size: 100MB
+
   jackson:
     time-zone: Asia/Ho_Chi_Minh
 
   jpa:
+    # Dùng update để Hibernate tự tạo/cập nhật bảng
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: false
+        # Hibernate 6 tự động chọn dialect, không cần khai báo để tránh lỗi deprecated
         jdbc:
           lob:
             non_contextual_creation: true
-        temp:
-          use_jdbc_metadata_defaults: false
-
+        boot:
+          # Cho phép Hibernate đọc metadata từ database để tránh treo
+          allow_jdbc_metadata_access: true
 
   mail:
     host: smtp.gmail.com
@@ -72,12 +71,10 @@ spring:
           starttls:
             enable: true
 
-
 logging:
   level:
     root: INFO
     org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: DEBUG
     org.springframework.jdbc.datasource: DEBUG
     org.hibernate.orm.jdbc.connections: DEBUG
 
@@ -85,4 +82,3 @@ cloudinary:
   cloud-name: dzmepj5y8
   api-key: 699318649326949
   api-secret: PSNSslVt2Q6UdgLVh7WICK_vaxs
-
