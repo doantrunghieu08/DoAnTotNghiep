@@ -1,44 +1,46 @@
-version: '3.8'
-
 services:
-  # 1. Khai báo dịch vụ Database (MySQL)
   db-doantotnghiep:
     image: mysql:8.0
     container_name: mysql_be
-    restart: always
+    restart: unless-stopped
+
     environment:
-      # Tên DB muốn tạo
-      MYSQL_DATABASE: kbvaamfl_DoAnTotNghiep
-      # Mật khẩu cho user root (Bạn tự đặt là admin cho dễ nhớ)
       MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: kbvaamfl_DoAnTotNgiep
+
     ports:
       - "3306:3306"
+
     volumes:
       - mysql_data:/var/lib/mysql
 
-  # 2. Khai báo dịch vụ Backend (Spring Boot)
   spring-be:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+
     container_name: doantotnghiep_be
-    ports:
-      - "8080:8080"
-    restart: always
+    restart: unless-stopped
+
     depends_on:
       - db-doantotnghiep
+
+    ports:
+      - "8080:8080"
+
     environment:
-      # URL trỏ vào tên service 'db-doantotnghiep' ở cổng 3306 (nội bộ Docker)
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNghiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=admin
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
 
-      # Các thông số JWT, Mail, Cloudinary giữ nguyên của Hiếu
-      - JWT_SIGNER_KEY=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
-      - MAIL_USERNAME=hotro.booingfilmticket@gmail.com
-      - MAIL_PASSWORD=rvsvidqahczqbgep
-      - CLOUDINARY_NAME=dzmepj5y8
-      - CLOUDINARY_API_KEY=699318649326949
-      - CLOUDINARY_API_SECRET=PSNSslVt2Q6UdgLVh7WICK_vaxs
+      JWT_SIGNER_KEY: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 
-# Khai báo Volume để lưu trữ dữ liệu DB bền vững (không mất khi restart)
+      MAIL_USERNAME: hotro.booingfilmticket@gmail.com
+      MAIL_PASSWORD: rvsvidqahczqbgep
+
+      CLOUDINARY_NAME: dzmepj5y8
+      CLOUDINARY_API_KEY: 699318649326949
+      CLOUDINARY_API_SECRET: PSNSslVt2Q6UdgLVh7WICK_vaxs
+
 volumes:
   mysql_data:
