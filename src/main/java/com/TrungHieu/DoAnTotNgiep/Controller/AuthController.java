@@ -24,7 +24,7 @@ import java.util.List;
 public class AuthController {
     AuthService authService;
 
-    @PostMapping("public/api/user/create")
+    @PostMapping("/public/api/user/create")
     public ResponseEntity<ApiResponse<UserResponse>> addUser(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
