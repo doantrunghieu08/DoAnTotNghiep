@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ExamTypeMapper {
+public interface ExamMapper {
     @Mapping(target = "isDeleted", source = "deleted")
     public ExamTypeResponse toResponse(Exam exam);
 

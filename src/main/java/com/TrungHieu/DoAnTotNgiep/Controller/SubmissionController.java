@@ -79,7 +79,7 @@ public class SubmissionController {
         return ResponseEntity.ok(aiResultJson);
     }
 
-    @PostMapping("teacher/submission/upload-video")
+    @PostMapping("/teacher/submission/upload-video")
     public ResponseEntity<ApiResponse<StudentSubmissionResponse>> uploadStudentVideo(@RequestBody CreationSubmissionRequest request){
         return ResponseEntity.ok(studentSubmissionService.uploadStudentVideo(request));
     }

@@ -8,9 +8,9 @@ import com.TrungHieu.DoAnTotNgiep.Entity.User;
 import com.TrungHieu.DoAnTotNgiep.Enum.RoleType;
 import com.TrungHieu.DoAnTotNgiep.Exception.AppException;
 import com.TrungHieu.DoAnTotNgiep.Exception.ErrorCode;
-import com.TrungHieu.DoAnTotNgiep.Mapper.ExamTypeMapper;
+import com.TrungHieu.DoAnTotNgiep.Mapper.ExamMapper;
 import com.TrungHieu.DoAnTotNgiep.Repository.ClassRepository;
-import com.TrungHieu.DoAnTotNgiep.Repository.ExamTypeRepository;
+import com.TrungHieu.DoAnTotNgiep.Repository.ExamRepository;
 import com.TrungHieu.DoAnTotNgiep.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -25,10 +25,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamTypeService {
+public class ExamService {
     UserRepository userRepository;
-    ExamTypeRepository examTypeRepository;
-    ExamTypeMapper examTypeMapper;
+    ExamRepository examRepository;
+    ExamMapper examMapper;
     ClassRepository classRepository;
 
     public ApiResponse<Page<ExamTypeResponse>> getAllExamByTeacherId(String idTeacher, int page, int size) {
@@ -45,10 +45,10 @@ public class ExamTypeService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
 
-        Page<Exam> examTypePage = examTypeRepository.findAllByTeacher(user, pageable);
+        Page<Exam> examTypePage = examRepository.findAllByTeacher(user, pageable);
 
 
-        Page<ExamTypeResponse> examTypeResponses = examTypePage.map(examTypeMapper::toResponse);
+        Page<ExamTypeResponse> examTypeResponses = examTypePage.map(examMapper::toResponse);
 
         return new ApiResponse<>(200, "Danh sách bài thi của giáo viên: " + user.getFullName(), examTypeResponses);
     }
@@ -63,23 +63,23 @@ public class ExamTypeService {
         exam.setDescription(request.getDescription());
         exam.setSampleVideoUrl(request.getSampleVideoUrl());
         exam.setTeacher(teacher);
-        examTypeRepository.save(exam);
-        return new ApiResponse<>(201, "Tao bai thi thanh cong", examTypeMapper.toResponse(exam));
+        examRepository.save(exam);
+        return new ApiResponse<>(201, "Tao bai thi thanh cong", examMapper.toResponse(exam));
     }
 
 
     @Transactional
     public void deleteExam(int id){
-        Exam exam = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+        Exam exam = examRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setDeleted(true);
-        examTypeRepository.save(exam);
+        examRepository.save(exam);
     }
 
     @Transactional
     public void restoreExam(int id){
-        Exam exam = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+        Exam exam = examRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setDeleted(false);
-        examTypeRepository.save(exam);
+        examRepository.save(exam);
     }
 
 

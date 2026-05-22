@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ExamTypeRepository extends JpaRepository<Exam, Integer> {
+public interface ExamRepository extends JpaRepository<Exam, Integer> {
     Page<Exam> findAllByTeacher(User user, Pageable pageable);
 
     public List<Exam> findAllByTeacher(User user);

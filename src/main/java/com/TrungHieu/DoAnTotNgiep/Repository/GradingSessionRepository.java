@@ -40,7 +40,7 @@ public interface GradingSessionRepository extends JpaRepository<GradingSession, 
     LEFT JOIN FETCH gs.submission sub
     LEFT JOIN FETCH sub.student s
     LEFT JOIN FETCH sub.classExam ce
-    LEFT JOIN FETCH ce.examType et
+    LEFT JOIN FETCH ce.exam et
     LEFT JOIN FETCH ce.classes c
     WHERE gs.teacher.id = :teacherId
     ORDER BY gs.id DESC

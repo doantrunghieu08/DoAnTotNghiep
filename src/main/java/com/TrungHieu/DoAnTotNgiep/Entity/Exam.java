@@ -7,13 +7,13 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Table(name = "exam_types")
+@Table(name = "exams")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExamType {
+public class Exam {
     @Id
             @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
@@ -34,6 +34,8 @@ public class ExamType {
     @OneToMany(mappedBy = "examType")
     List<ClassExam> classExams;
 
-
+    @ManyToOne
+            @JoinColumn(name = "exam_types_id")
+    ExamType examType;
 
 }

@@ -1,4 +1,26 @@
 package com.TrungHieu.DoAnTotNgiep.Controller;
 
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamTypeRequest.CreationExamTypeRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
+import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
+import com.TrungHieu.DoAnTotNgiep.Service.ExamTypeService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamTypeController {
+    ExamTypeService examTypeService;
+
+    @PostMapping("/api/teacher/exam-type")
+    public ResponseEntity<ApiResponse<ExamType>> creationRequest(@RequestBody CreationExamTypeRequest request){
+        return ResponseEntity.ok(examTypeService.creationExam(request));
+    }
+
 }

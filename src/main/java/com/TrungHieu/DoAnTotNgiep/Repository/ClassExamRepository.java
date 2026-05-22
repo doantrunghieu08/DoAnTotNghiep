@@ -2,8 +2,7 @@ package com.TrungHieu.DoAnTotNgiep.Repository;
 
 import com.TrungHieu.DoAnTotNgiep.Entity.ClassExam;
 import com.TrungHieu.DoAnTotNgiep.Entity.Classes;
-import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
-import com.TrungHieu.DoAnTotNgiep.Entity.User;
+import com.TrungHieu.DoAnTotNgiep.Entity.Exam;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +23,7 @@ public interface ClassExamRepository extends JpaRepository<ClassExam, Integer> {
     void deleteExamByClassIdAndExamId(@Param("idClass") String idClass, @Param("idExam") int idExam);
 
     @Query(value = "SELECT * FROM class_exams WHERE class_id = :#{#classes.id} AND exam_type_id = :#{#examType.id}", nativeQuery = true)
-    Optional<ClassExam> findByClassesAndExamType(@Param("classes") Classes classes, @Param("examType") ExamType examType);
+    Optional<ClassExam> findByClassesAndExamType(@Param("classes") Classes classes, @Param("examType") Exam exam);
 
     // Lấy danh sách bài thi đang hoạt động (isDeleted = false)
     Page<ClassExam> findByClasses_IdAndIsDeletedFalse(String classId, Pageable pageable);

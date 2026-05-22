@@ -4,16 +4,14 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.AddiationExamToClassRe
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
 import com.TrungHieu.DoAnTotNgiep.Entity.ClassExam;
 import com.TrungHieu.DoAnTotNgiep.Entity.Classes;
-import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
-import com.TrungHieu.DoAnTotNgiep.Entity.StudentSubmission;
+import com.TrungHieu.DoAnTotNgiep.Entity.Exam;
 import com.TrungHieu.DoAnTotNgiep.Exception.AppException;
 import com.TrungHieu.DoAnTotNgiep.Exception.ErrorCode;
 import com.TrungHieu.DoAnTotNgiep.Mapper.ClassExamMapper;
-import com.TrungHieu.DoAnTotNgiep.Mapper.ExamTypeMapper;
+import com.TrungHieu.DoAnTotNgiep.Mapper.ExamMapper;
 import com.TrungHieu.DoAnTotNgiep.Repository.ClassExamRepository;
 import com.TrungHieu.DoAnTotNgiep.Repository.ClassRepository;
-import com.TrungHieu.DoAnTotNgiep.Repository.ExamTypeRepository;
-import com.cloudinary.Api;
+import com.TrungHieu.DoAnTotNgiep.Repository.ExamRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,33 +22,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ClassExamService {
     ClassRepository classRepository;
-    ExamTypeRepository examTypeRepository;
+    ExamRepository examRepository;
     ClassExamRepository classExamRepository;
     ClassExamMapper classExamMapper;
-    ExamTypeMapper examTypeMapper;
+    ExamMapper examMapper;
 
     @Transactional
     public ApiResponse<ClassExamResponse> addExamToClass(AddiationExamToClassRequest request){
         Classes classes = classRepository.findById(request.getIdClass())
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
-        ExamType examType = examTypeRepository.findById(request.getIdExam())
+        Exam exam = examRepository.findById(request.getIdExam())
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
 
         // Tạo mới hoàn toàn, không quan tâm cái cũ
         ClassExam classExam = new ClassExam();
         classExam.setClasses(classes);
-        classExam.setExamType(examType);
+        classExam.setExam(exam);
         classExam.setSubmissionDeadline(request.getSubmissionDeadline());
         classExam.setGradingDeadline(request.getGradingDeadline());
         classExam.setIsDeleted(false); // Đảm bảo trạng thái là false

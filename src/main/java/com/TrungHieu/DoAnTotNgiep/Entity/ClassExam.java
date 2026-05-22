@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Where;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class ClassExam {
 
     @ManyToOne
     @JoinColumn(name = "exam_type_id")
-    ExamType examType;
+    Exam exam;
 
     LocalDateTime submissionDeadline;
     LocalDateTime gradingDeadline;

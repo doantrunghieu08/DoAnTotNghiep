@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -70,7 +69,7 @@ public class User {
     List<Classes> classes;
 
     @OneToMany(mappedBy = "teacher")
-    List<ExamType> examTypes;
+    List<Exam> exams;
 
     @OneToMany(mappedBy = "teacher")
     List<ErrorType> errorTypes;
