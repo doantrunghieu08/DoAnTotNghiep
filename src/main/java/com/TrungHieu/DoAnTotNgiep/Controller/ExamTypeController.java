@@ -2,6 +2,7 @@ package com.TrungHieu.DoAnTotNgiep.Controller;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamTypeRequest.CreationExamTypeRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamCodeResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
 import com.TrungHieu.DoAnTotNgiep.Service.ExamTypeService;
 import lombok.AccessLevel;
@@ -22,12 +23,12 @@ public class ExamTypeController {
     ExamTypeService examTypeService;
 
     @PostMapping("/api/teacher/exam-type")
-    public ResponseEntity<ApiResponse<ExamType>> creationRequest(@RequestBody CreationExamTypeRequest request){
+    public ResponseEntity<ApiResponse<ExamCodeResponse>> creationRequest(@RequestBody CreationExamTypeRequest request){
         return ResponseEntity.ok(examTypeService.creationExamType(request));
     }
 
     @GetMapping("/api/teacher/exam-type")
-    public ResponseEntity<ApiResponse<List<ExamType>>> getExamType(){
+    public ResponseEntity<ApiResponse<List<ExamCodeResponse>>> getExamType(){
         return ResponseEntity.ok(examTypeService.getExamTypes());
     }
 
