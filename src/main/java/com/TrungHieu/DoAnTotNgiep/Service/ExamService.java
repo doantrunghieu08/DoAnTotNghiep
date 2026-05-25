@@ -4,6 +4,7 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.CreationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamTypeResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.Exam;
+import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
 import com.TrungHieu.DoAnTotNgiep.Entity.User;
 import com.TrungHieu.DoAnTotNgiep.Enum.RoleType;
 import com.TrungHieu.DoAnTotNgiep.Exception.AppException;
@@ -11,6 +12,7 @@ import com.TrungHieu.DoAnTotNgiep.Exception.ErrorCode;
 import com.TrungHieu.DoAnTotNgiep.Mapper.ExamMapper;
 import com.TrungHieu.DoAnTotNgiep.Repository.ClassRepository;
 import com.TrungHieu.DoAnTotNgiep.Repository.ExamRepository;
+import com.TrungHieu.DoAnTotNgiep.Repository.ExamTypeRepository;
 import com.TrungHieu.DoAnTotNgiep.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -30,6 +32,7 @@ public class ExamService {
     ExamRepository examRepository;
     ExamMapper examMapper;
     ClassRepository classRepository;
+    ExamTypeRepository examTypeRepository;
 
     public ApiResponse<Page<ExamTypeResponse>> getAllExamByTeacherId(String idTeacher, int page, int size) {
 
@@ -63,6 +66,8 @@ public class ExamService {
         exam.setDescription(request.getDescription());
         exam.setSampleVideoUrl(request.getSampleVideoUrl());
         exam.setTeacher(teacher);
+        ExamType examType = examTypeRepository.findById(request.getIdExamCode()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+        exam.setExamType(examType);
         examRepository.save(exam);
         return new ApiResponse<>(201, "Tao bai thi thanh cong", examMapper.toResponse(exam));
     }

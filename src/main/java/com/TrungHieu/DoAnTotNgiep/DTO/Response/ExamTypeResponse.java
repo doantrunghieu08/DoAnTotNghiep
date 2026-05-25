@@ -16,5 +16,5 @@ public class ExamTypeResponse {
     String description;
     String sampleVideoUrl;
     Boolean isDeleted;
-
+    String examCode;
 }
