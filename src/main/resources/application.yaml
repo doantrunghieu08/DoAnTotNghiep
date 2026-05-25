@@ -47,7 +47,7 @@ spring:
   jpa:
     # Dùng update để Hibernate tự tạo/cập nhật bảng
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
