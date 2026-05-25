@@ -41,7 +41,7 @@ public class ExamController {
     }
 
     @PutMapping("/api/teacher/update-exam/{idExam}")
-    public ResponseEntity<ApiResponse<ExamTypeResponse>> updateExam(@PathVariable int idExam, UpdationExamRequest request){
+    public ResponseEntity<ApiResponse<ExamTypeResponse>> updateExam(@PathVariable int idExam,@RequestBody UpdationExamRequest request){
         ApiResponse<ExamTypeResponse> apiResponse = examService.updateExam(idExam, request);
         return ResponseEntity.ok(apiResponse);
     }

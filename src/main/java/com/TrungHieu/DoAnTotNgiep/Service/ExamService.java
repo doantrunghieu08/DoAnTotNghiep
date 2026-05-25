@@ -88,6 +88,7 @@ public class ExamService {
         examRepository.save(exam);
     }
 
+    @Transactional
     public ApiResponse<ExamTypeResponse> updateExam(int idExam, UpdationExamRequest request){
         Exam exam = examRepository.findById(idExam)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
