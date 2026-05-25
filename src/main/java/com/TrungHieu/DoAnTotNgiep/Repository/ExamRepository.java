@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExamRepository extends JpaRepository<Exam, Integer> {
     Page<Exam> findAllByTeacher(User user, Pageable pageable);
 
     public List<Exam> findAllByTeacher(User user);
+
 }

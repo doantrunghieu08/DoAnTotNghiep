@@ -1,6 +1,7 @@
 package com.TrungHieu.DoAnTotNgiep.Controller;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.CreationExamRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.UpdationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamTypeResponse;
 import com.TrungHieu.DoAnTotNgiep.Service.ExamService;
@@ -38,6 +39,14 @@ public class ExamController {
         examService.restoreExam(id);
         return ResponseEntity.ok(new ApiResponse<>(200, "Khôi phục bài thi thành công", null));
     }
+
+    @PutMapping("/api/teacher/update-exam/{idExam}")
+    public ResponseEntity<ApiResponse<ExamTypeResponse>> updateExam(@PathVariable int idExam, UpdationExamRequest request){
+        ApiResponse<ExamTypeResponse> apiResponse = examService.updateExam(idExam, request);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
 
 
 }

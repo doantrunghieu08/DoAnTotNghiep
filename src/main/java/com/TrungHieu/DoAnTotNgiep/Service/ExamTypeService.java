@@ -16,12 +16,19 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamTypeService {
     ExamTypeRepository examTypeRepository;
-    public ApiResponse<ExamType> creationExam(CreationExamTypeRequest request){
+
+    public ApiResponse<ExamType> creationExamType(CreationExamTypeRequest request){
         ExamType examType = new ExamType();
         examType.setExamCode(request.getExamCode());
         examTypeRepository.save(examType);
         return new ApiResponse<>(200, "Thêm loại bài thi thành công", examType);
     }
+
+    public ApiResponse<List<ExamType>> getExamTypes(){
+        List<ExamType> examTypes = examTypeRepository.findAll();
+        return new ApiResponse<>(200, "Danh sach loai bai thi", examTypes);
+    }
+
 
 
 }

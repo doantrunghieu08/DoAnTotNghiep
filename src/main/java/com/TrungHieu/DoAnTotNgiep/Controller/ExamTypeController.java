@@ -8,9 +8,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +23,12 @@ public class ExamTypeController {
 
     @PostMapping("/api/teacher/exam-type")
     public ResponseEntity<ApiResponse<ExamType>> creationRequest(@RequestBody CreationExamTypeRequest request){
-        return ResponseEntity.ok(examTypeService.creationExam(request));
+        return ResponseEntity.ok(examTypeService.creationExamType(request));
+    }
+
+    @GetMapping("/api/teacher/exam-type")
+    public ResponseEntity<ApiResponse<List<ExamType>>> getExamType(){
+        return ResponseEntity.ok(examTypeService.getExamTypes());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.TrungHieu.DoAnTotNgiep.Service;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.CreationExamRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.UpdationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamTypeResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.Exam;
@@ -85,6 +86,16 @@ public class ExamService {
         Exam exam = examRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setDeleted(false);
         examRepository.save(exam);
+    }
+
+    public ApiResponse<ExamTypeResponse> updateExam(int idExam, UpdationExamRequest request){
+        Exam exam = examRepository.findById(idExam).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+        ExamType examType = examTypeRepository.findById(request.getIdExamType()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+        exam.setName(request.getName());
+        exam.setDescription(request.getDescription());
+        exam.setSampleVideoUrl(request.getSampleVideoUrl());
+        Exam saved = examRepository.save(exam);
+        return new ApiResponse<>(200, "Cập nhật thành công", examMapper.toResponse(saved));
     }
 
 
