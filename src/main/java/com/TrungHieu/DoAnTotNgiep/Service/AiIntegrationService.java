@@ -42,12 +42,15 @@ public class AiIntegrationService {
 
         List<ErrorType> errorTypes = errorTypeRepository.findAllByTeacher(teacher);
 
+
         // 3. Tự khởi tạo danh sách DTO ngay trong hàm, không bắt truyền từ ngoài vào
         List<ErrorCriteriaDto> allowedErrors = new ArrayList<>();
         for (ErrorType errorType : errorTypes){
             ErrorCriteriaDto dto = new ErrorCriteriaDto();
             dto.setIdError(errorType.getId());
-            dto.setErrorName(errorType.getName());
+
+            dto.setErrorName(errorType.getDescription());
+
             dto.setDeduction(errorType.getDeduction());
             allowedErrors.add(dto);
         }
