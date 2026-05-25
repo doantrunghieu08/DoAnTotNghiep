@@ -89,11 +89,29 @@ public class ExamService {
     }
 
     public ApiResponse<ExamTypeResponse> updateExam(int idExam, UpdationExamRequest request){
-        Exam exam = examRepository.findById(idExam).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
-        ExamType examType = examTypeRepository.findById(request.getIdExamType()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
-        exam.setName(request.getName());
-        exam.setDescription(request.getDescription());
-        exam.setSampleVideoUrl(request.getSampleVideoUrl());
+        Exam exam = examRepository.findById(idExam)
+                .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+
+        // 1. Cập nhật ExamType nếu phía Frontend có truyền idExamType mới
+        if (request.getIdExamType() != 0) { // hoặc != null nếu dùng kiểu Integer
+            ExamType examType = examTypeRepository.findById(request.getIdExamType())
+                    .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
+            exam.setExamType(examType); // Nhớ gán lại mối quan hệ cho đúng
+        }
+
+        // 2. Kiểm tra và giữ nguyên giá trị nếu không cập nhật
+        if (request.getName() != null && !request.getName().trim().isEmpty()) {
+            exam.setName(request.getName());
+        }
+
+        if (request.getDescription() != null) { // Cho phép description truyền chuỗi rỗng nếu muốn xóa mô tả
+            exam.setDescription(request.getDescription());
+        }
+
+        if (request.getSampleVideoUrl() != null && !request.getSampleVideoUrl().trim().isEmpty()) {
+            exam.setSampleVideoUrl(request.getSampleVideoUrl());
+        }
+
         Exam saved = examRepository.save(exam);
         return new ApiResponse<>(200, "Cập nhật thành công", examMapper.toResponse(saved));
     }
