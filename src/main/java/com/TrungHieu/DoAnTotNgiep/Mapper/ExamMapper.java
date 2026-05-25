@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
     @Mapping(target = "isDeleted", source = "deleted")
+    @Mapping(target = "examCode", source = "examType.examcode")
     public ExamTypeResponse toResponse(Exam exam);
 
     public List<ExamTypeResponse> toResponseList(List<Exam> exams);
