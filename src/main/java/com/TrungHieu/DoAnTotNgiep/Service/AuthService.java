@@ -76,7 +76,7 @@ public class AuthService {
         user.setStatus(request.getStatusType());
         user.setAvatarImage(request.getAvatarImage());
         user.setIsRequirePasswordChange(false);
-
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
         UserResponse userResponse = userMapper.toResponse(user);
         return new ApiResponse<>(201, "Dang ky thanh cong", userResponse);

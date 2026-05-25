@@ -66,6 +66,7 @@ public class ErrorTypeService {
         // 5. Chuyển đổi sang Response DTO bằng Map (giữ nguyên cấu trúc Page)
         Page<ErrorResponse> errorResponses = errorTypePage.map(errorMapper::toResponse);
 
+
         return new ApiResponse<>(200, "Lấy danh sách lỗi thành công", errorResponses);
     }
 

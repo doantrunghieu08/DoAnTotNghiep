@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,7 +48,7 @@ public class ClassExamService {
         classExam.setSubmissionDeadline(request.getSubmissionDeadline());
         classExam.setGradingDeadline(request.getGradingDeadline());
         classExam.setIsDeleted(false); // Đảm bảo trạng thái là false
-
+        classExam.setCreatedAt(LocalDateTime.now());
         classExamRepository.save(classExam);
 
         ClassExamResponse classExamResponse = classExamMapper.toResponse(classExam);
