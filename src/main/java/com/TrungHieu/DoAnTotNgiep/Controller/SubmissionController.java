@@ -68,12 +68,13 @@ public class SubmissionController {
     }
 
     @PostMapping("/teacher/grade")
-    public ResponseEntity<String> gradeStudentVideo(
+    public ResponseEntity<AiGradeResponse> gradeStudentVideo(
             @RequestParam String idTeacher,
+            @RequestParam int idClassExam,
             @RequestParam String videoUrl
     ) {
         // Gọi sang trạm AI local qua dịch vụ Service bạn vừa viết
-        String aiResultJson = aiIntegrationService.callPythonAiService(idTeacher, videoUrl);
+        AiGradeResponse aiResultJson = aiIntegrationService.callPythonAiService(idTeacher, idClassExam,videoUrl);
 
         // Trả chuỗi JSON nhận xét + điểm số từ AI về lại cho Client hiển thị/kiểm thử
         return ResponseEntity.ok(aiResultJson);

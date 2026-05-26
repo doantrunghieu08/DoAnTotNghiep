@@ -1,15 +1,13 @@
 package com.TrungHieu.DoAnTotNgiep.DTO.Request.ErrorRequest;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class ErrorCriteriaDto {
     int idError;
     String errorName;
