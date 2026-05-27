@@ -28,7 +28,7 @@ spring:
     # URL kết nối tới service mysql trong docker
     url: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
     username: root
-    password: admin
+    password: Doanhieu@1
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 30
@@ -47,7 +47,7 @@ spring:
   jpa:
     # Dùng update để Hibernate tự tạo/cập nhật bảng
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:

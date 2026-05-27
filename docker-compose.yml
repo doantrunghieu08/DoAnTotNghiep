@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: Doanhieu@1
       MYSQL_DATABASE: kbvaamfl_DoAnTotNgiep
 
     ports:
