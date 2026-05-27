@@ -18,6 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExamType {
     @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     String examCode;

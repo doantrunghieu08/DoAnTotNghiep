@@ -1,6 +1,7 @@
 package com.TrungHieu.DoAnTotNgiep.DTO.Response;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +26,7 @@ public class ExamResponse {
 
     ExamTypeResponse examTypeResponse;
 
+    @JsonDeserialize(using = RawJsonDeserializer.class) 
+    String standardData;
 
 }

@@ -56,7 +56,7 @@ public class StudentSubmissionService {
         studentSubmission.setFileSizeBytes1(request.getFileSizeBytes1());
         studentSubmission.setVideoUrl2(request.getVideoUrl2());
         studentSubmission.setFileSizeBytes2(request.getFileSizeBytes2());
-
+        studentSubmission.setStudentData(request.getStudentData());
 
         studentSubmission.setStatus(SubmittedStatus.SUBMITTED);
 
@@ -178,6 +178,7 @@ public class StudentSubmissionService {
                     newSub.setStudent(student);
                     newSub.setStatus(SubmittedStatus.SUBMITTED);
                     newSub.setSubmittedAt(LocalDateTime.now());
+                    newSub.setStudentData(request.getStudentData());
                     return newSub;
                 });
 

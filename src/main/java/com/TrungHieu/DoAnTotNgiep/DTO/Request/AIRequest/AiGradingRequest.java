@@ -12,6 +12,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class AiGradingRequest {
+    String standardData;
     String sampleVideoUrl;
     String videoUrl;
     List<ErrorCriteriaDto> allowedErrors;

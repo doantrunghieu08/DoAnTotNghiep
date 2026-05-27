@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,54 +37,48 @@ public class AiIntegrationService {
             int idClassExam,
             String submissionVideoUrl) {
 
-        SimpleClientHttpRequestFactory requestFactory =
-                new SimpleClientHttpRequestFactory();
-
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(15000); // 15 giây
         requestFactory.setReadTimeout(300000);   // 5 phút
 
-        RestTemplate restTemplate =
-                new RestTemplate(requestFactory);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         try {
-
-            // Tìm giảng viên
+            // 1. Tìm giảng viên
             User teacher = userRepository.findById(idTeacher)
-                    .orElseThrow(() ->
-                            new AppException(ErrorCode.DATA_NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
 
-            // Tìm bài thi
+            // 2. Tìm bài thi của lớp (ClassExam)
             ClassExam classExam = classExamRepository.findById(idClassExam)
-                    .orElseThrow(() ->
-                            new AppException(ErrorCode.DATA_NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
 
-            String sampleVideoUrl =
-                    classExam.getExam().getSampleVideoUrl();
+            // -----------------------------------------------------------------
+            // TỐI ƯU TẠI ĐÂY: Lấy chuỗi dữ liệu JSON mẫu từ DB ra thay vì lấy link video
+            // -----------------------------------------------------------------
+            String standardData = classExam.getExam().getStandardData();
 
-            if (sampleVideoUrl == null || sampleVideoUrl.isBlank()) {
+            if (standardData == null || standardData.isBlank()) {
+                // Nếu bài thi chưa có dữ liệu AI gốc, báo lỗi dữ liệu chưa sẵn sàng
                 throw new AppException(ErrorCode.DATA_NOT_FOUND);
             }
 
-            // Lấy danh sách lỗi của giảng viên
-            List<ErrorType> errorTypes =
-                    errorTypeRepository.findAllByTeacher(teacher);
+            // 3. Lấy danh sách tiêu chí lỗi của giảng viên
+            List<ErrorType> errorTypes = errorTypeRepository.findAllByTeacher(teacher);
 
-            List<ErrorCriteriaDto> allowedErrors =
-                    errorTypes.stream()
-                            .map(errorType -> ErrorCriteriaDto.builder()
-                                    .idError(errorType.getId())
-                                    .errorName(errorType.getDescription())
-                                    .deduction(errorType.getDeduction())
-                                    .build())
-                            .toList();
+            List<ErrorCriteriaDto> allowedErrors = errorTypes.stream()
+                    .map(errorType -> ErrorCriteriaDto.builder()
+                            .idError(errorType.getId())
+                            .errorName(errorType.getDescription())
+                            .deduction(errorType.getDeduction())
+                            .build())
+                    .toList();
 
-            // Payload gửi sang Python
-            AiGradingRequest requestPayload =
-                    AiGradingRequest.builder()
-                            .sampleVideoUrl(sampleVideoUrl)
-                            .videoUrl(submissionVideoUrl)
-                            .allowedErrors(allowedErrors)
-                            .build();
+            // 4. Đóng gói Payload mới gửi sang Python
+            AiGradingRequest requestPayload = AiGradingRequest.builder()
+                    .standardData(standardData)          // Thay thế sampleVideoUrl thành dữ liệu cấu trúc mẫu
+                    .videoUrl(submissionVideoUrl)        // Link video bài nộp của sinh viên
+                    .allowedErrors(allowedErrors)
+                    .build();
 
             URI targetUri = UriComponentsBuilder
                     .fromHttpUrl(AI_SERVICE_URL)
@@ -93,6 +86,7 @@ public class AiIntegrationService {
                     .build()
                     .toUri();
 
+            // 5. Bắn request sang Python và chờ nhận kết quả chấm bài (Điểm số, List lỗi cụ thể, Student Data JSON)
             return restTemplate.postForObject(
                     targetUri,
                     requestPayload,
@@ -100,16 +94,11 @@ public class AiIntegrationService {
             );
 
         } catch (HttpStatusCodeException e) {
-
-            System.out.println("AI Service Response:");
+            System.out.println("AI Service Response Error:");
             System.out.println(e.getResponseBodyAsString());
-
             throw new AppException(ErrorCode.AI_SERVICE_ERROR);
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
             throw new AppException(ErrorCode.AI_SERVICE_ERROR);
         }
     }

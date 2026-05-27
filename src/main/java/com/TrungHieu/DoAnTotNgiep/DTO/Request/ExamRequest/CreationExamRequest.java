@@ -16,4 +16,5 @@ public class CreationExamRequest {
     String sampleVideoUrl;
     String teacherId;
     int idExamCode;
+    String standardData;
 }

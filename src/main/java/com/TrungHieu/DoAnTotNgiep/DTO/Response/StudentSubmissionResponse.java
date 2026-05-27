@@ -33,4 +33,6 @@ public class StudentSubmissionResponse {
     LocalDateTime submittedAt;
 
     SubmittedStatus status;
+
+    String studentData;
 }

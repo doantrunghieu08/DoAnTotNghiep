@@ -26,4 +26,6 @@ public class CreationSubmissionRequest {
     long fileSizeBytes2;
 
     SubmittedStatus status;
+
+    String studentData;
 }

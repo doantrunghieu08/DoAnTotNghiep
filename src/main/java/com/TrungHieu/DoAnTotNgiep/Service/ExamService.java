@@ -71,6 +71,7 @@ public class ExamService {
         exam.setTeacher(teacher);
         ExamType examType = examTypeRepository.findById(request.getIdExamCode()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setExamType(examType);
+        exam.setStandardData(request.getStandardData());
         exam.setCreatedAt(LocalDateTime.now());
         examRepository.save(exam);
         return new ApiResponse<>(201, "Tao bai thi thanh cong", examMapper.toResponse(exam));

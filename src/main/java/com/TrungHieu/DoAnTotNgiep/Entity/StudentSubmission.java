@@ -4,6 +4,8 @@ import com.TrungHieu.DoAnTotNgiep.Enum.SubmittedStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -50,4 +52,8 @@ public class StudentSubmission {
 
     @Enumerated(value = EnumType.STRING)
     SubmittedStatus status;
+
+    @Column(name = "student_data")
+    @JdbcTypeCode(SqlTypes.JSON)
+    String studentData;
 }

@@ -3,6 +3,8 @@ package com.TrungHieu.DoAnTotNgiep.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -49,4 +51,7 @@ public class Exam {
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
 
+    @Column(name = "standard_data")
+    @JdbcTypeCode(SqlTypes.JSON)
+    String standardData;
 }
