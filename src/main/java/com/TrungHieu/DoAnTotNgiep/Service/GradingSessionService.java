@@ -4,6 +4,7 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ErrorRequest.CreationErrorRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.GradingSessionRequest.CreationGradingSessionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.GradingSessionResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.StudentSubmissionResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.UserResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.*;
 import com.TrungHieu.DoAnTotNgiep.Enum.GradingMode;
@@ -76,6 +77,12 @@ public class GradingSessionService {
 
         GradingSession savedSession = gradingSessionRepository.save(gradingSession);
         GradingSessionResponse response = gradingSessionMapper.toResponse(savedSession);
+
+        StudentSubmissionResponse studentSubmissionResponse = response.getStudentSubmissionResponse();
+        studentSubmissionResponse.setStandardData(submission.getClassExam().getExam().getStandardData());
+
+
+        response.setStudentSubmissionResponse(studentSubmissionResponse);
 
         return new ApiResponse<>(201, "Khởi tạo phiên chấm mới",
                 response);
