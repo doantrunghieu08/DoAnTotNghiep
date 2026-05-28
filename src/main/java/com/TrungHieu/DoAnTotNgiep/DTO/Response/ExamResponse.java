@@ -26,7 +26,7 @@ public class ExamResponse {
 
     ExamTypeResponse examTypeResponse;
 
-    @JsonDeserialize(using = RawJsonDeserializer.class) 
+    @JsonDeserialize(using = RawJsonDeserializer.class)
     String standardData;
 
 }

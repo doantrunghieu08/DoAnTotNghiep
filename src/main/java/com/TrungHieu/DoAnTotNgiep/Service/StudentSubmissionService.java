@@ -2,10 +2,7 @@ package com.TrungHieu.DoAnTotNgiep.Service;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubmissionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
-import com.TrungHieu.DoAnTotNgiep.Entity.ClassExam;
-import com.TrungHieu.DoAnTotNgiep.Entity.GradingSession;
-import com.TrungHieu.DoAnTotNgiep.Entity.StudentSubmission;
-import com.TrungHieu.DoAnTotNgiep.Entity.User;
+import com.TrungHieu.DoAnTotNgiep.Entity.*;
 import com.TrungHieu.DoAnTotNgiep.Enum.GradingMode;
 import com.TrungHieu.DoAnTotNgiep.Enum.SubmittedStatus;
 import com.TrungHieu.DoAnTotNgiep.Exception.AppException;
@@ -57,7 +54,6 @@ public class StudentSubmissionService {
         studentSubmission.setVideoUrl2(request.getVideoUrl2());
         studentSubmission.setFileSizeBytes2(request.getFileSizeBytes2());
         studentSubmission.setStudentData(request.getStudentData());
-
         studentSubmission.setStatus(SubmittedStatus.SUBMITTED);
 
 
@@ -65,8 +61,11 @@ public class StudentSubmissionService {
 
         // 6. Lưu vào DB (Hibernate tự hiểu: có ID thì UPDATE, chưa có ID thì INSERT)
         submissionRepository.save(studentSubmission);
+        StudentSubmissionResponse response = studentSubmissionMapper.toResponse(studentSubmission);
+        String standardData = classExam.getExam().getStandardData();
+        response.setStandardData(standardData);
 
-        return new ApiResponse<>(201, "Nộp bài thành công", studentSubmissionMapper.toResponse(studentSubmission));
+        return new ApiResponse<>(201, "Nộp bài thành công", response);
     }
 
     public ApiResponse<List<SubmissionSummaryResponse>> getClassSubmissionSummary(int classExamId) {

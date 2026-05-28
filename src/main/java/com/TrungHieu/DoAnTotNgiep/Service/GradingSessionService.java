@@ -75,9 +75,10 @@ public class GradingSessionService {
         gradingSession.setGradedAt(Instant.now());
 
         GradingSession savedSession = gradingSessionRepository.save(gradingSession);
+        GradingSessionResponse response = gradingSessionMapper.toResponse(savedSession);
 
         return new ApiResponse<>(201, "Khởi tạo phiên chấm mới",
-                gradingSessionMapper.toResponse(savedSession));
+                response);
     }
 
     @Transactional

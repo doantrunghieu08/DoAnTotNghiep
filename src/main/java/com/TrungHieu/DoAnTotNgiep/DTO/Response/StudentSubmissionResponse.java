@@ -20,6 +20,8 @@ public class StudentSubmissionResponse {
 
     int idClassExam;
 
+    String standardData;
+
     String idStudent;
 
     String videoUrl1;
