@@ -61,8 +61,13 @@ public class GradingSessionService {
 
         // 3. Nếu tìm thấy, sếp trả về ngay phiên đó luôn (Vào lại phiên cũ)
         if (existingSession.isPresent()) {
-            return new ApiResponse<>(200, "Vào lại phiên chấm hiện tại",
-                    gradingSessionMapper.toResponse(existingSession.get()));
+            GradingSessionResponse response = gradingSessionMapper.toResponse(existingSession.get());
+            
+            StudentSubmissionResponse studentSubmissionResponse = response.getStudentSubmissionResponse();
+            studentSubmissionResponse.setStandardData(submission.getClassExam().getExam().getStandardData());
+            response.setStudentSubmissionResponse(studentSubmissionResponse);
+
+            return new ApiResponse<>(200, "Vào lại phiên chấm hiện tại", response);
         }
 
 
