@@ -80,7 +80,7 @@ public class GradingSessionService {
         gradingSession.setStatus(GradingSessionStatus.IN_PROGRESS);
         gradingSession.setGradedAt(Instant.now());
 
-        GradingSession savedSession = gradingSessionRepository.save(gradingSession);
+        GradingSession savedSession = gradingSessionRepository.saveAndFlush(gradingSession);
         GradingSessionResponse response = gradingSessionMapper.toResponse(savedSession);
 
         StudentSubmissionResponse studentSubmissionResponse = response.getStudentSubmissionResponse();
