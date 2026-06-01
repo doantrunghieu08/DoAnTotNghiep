@@ -41,4 +41,6 @@ public class ErrorTypeController {
 
         return ResponseEntity.ok(new ApiResponse<>(200, "Khoi phuc thanh cong", null));
     }
+
+
 }

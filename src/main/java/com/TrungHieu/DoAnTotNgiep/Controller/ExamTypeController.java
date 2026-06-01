@@ -1,6 +1,7 @@
 package com.TrungHieu.DoAnTotNgiep.Controller;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamTypeRequest.CreationExamTypeRequest;
+import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamTypeRequest.UpdationExamCodeRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamCodeResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
@@ -9,10 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +33,26 @@ public class ExamTypeController {
     @GetMapping("/api/admin/exam-type/exam")
     public ResponseEntity<ApiResponse<Map<String, Integer>>> countExamByExamCode(){
         return ResponseEntity.ok(examTypeService.getExamCountMap());
+    }
+
+    @GetMapping("/api/admin/exam-type/delete")
+    public ResponseEntity<ApiResponse<List<ExamCodeResponse>>> getExamTypeIsDeleteTrue(){
+        return ResponseEntity.ok(examTypeService.getExamTypesIsDeleteTrue());
+    }
+
+    @PutMapping("/api/admin/exam-type/{id}")
+    public ResponseEntity<ApiResponse<ExamCodeResponse>> updateExamType(@PathVariable int id, @RequestBody UpdationExamCodeRequest request){
+        return ResponseEntity.ok(examTypeService.updateExamType(id, request));
+    }
+
+    @PutMapping("/api/admin/exam-type/{id}/restore")
+    public ResponseEntity<ApiResponse<ExamCodeResponse>> restoreExamType(@PathVariable int id){
+        return ResponseEntity.ok(examTypeService.restoreExamType(id));
+    }
+
+    @DeleteMapping("/api/admin/exam-type/{id}")
+    public ResponseEntity<ApiResponse<ExamCodeResponse>> deleteExamType(@PathVariable int id){
+        return ResponseEntity.ok(examTypeService.deleteExamType(id));
     }
 
 }
