@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ import java.util.List;
 public class ExamTypeController {
     ExamTypeService examTypeService;
 
-    @PostMapping("/api/teacher/exam-type")
+    @PostMapping("/api/admin/exam-type")
     public ResponseEntity<ApiResponse<ExamCodeResponse>> creationRequest(@RequestBody CreationExamTypeRequest request){
         return ResponseEntity.ok(examTypeService.creationExamType(request));
     }
@@ -30,6 +31,10 @@ public class ExamTypeController {
     @GetMapping("/api/teacher/exam-type")
     public ResponseEntity<ApiResponse<List<ExamCodeResponse>>> getExamType(){
         return ResponseEntity.ok(examTypeService.getExamTypes());
+    }
+    @GetMapping("/api/admin/exam-type/exam")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> countExamByExamCode(){
+        return ResponseEntity.ok(examTypeService.getExamCountMap());
     }
 
 }

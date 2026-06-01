@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,16 @@ public class ExamTypeService {
         List<ExamType> examTypes = examTypeRepository.findAll();
         return new ApiResponse<>(200, "Danh sach loai bai thi", examTypeMapper.toResponseList(examTypes));
     }
+
+    public ApiResponse<Map<String, Integer>> getExamCountMap(){
+        List<Map<String, Object>> rows = examTypeRepository.countExamByExamCode();
+
+        return new ApiResponse<>(200, "Lấy số lượng thành công",rows.stream().collect(Collectors.toMap(
+                row -> (String) row.get("exam_code"),
+                row -> ((Number) row.get("SLBaiThi")).intValue()
+        )));
+    }
+
 
 
 
