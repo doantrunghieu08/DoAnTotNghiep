@@ -51,6 +51,7 @@ public class ExamTypeService {
             return new ApiResponse<>(200, "Lỗi này chưa có trong danh sách xóa", examTypeMapper.toResponse(examType));
         }
         examType.setDeleted(false);
+        examTypeRepository.save(examType);
         return new ApiResponse<>(200, "Khoi phuc thanh cong", examTypeMapper.toResponse(examType));
     }
 
@@ -60,12 +61,14 @@ public class ExamTypeService {
             return new ApiResponse<>(200, "Lỗi này đã có trong danh sách xóa", examTypeMapper.toResponse(examType));
         }
         examType.setDeleted(true);
+        examTypeRepository.save(examType);
         return new ApiResponse<>(200, "Xóa thành công", examTypeMapper.toResponse(examType));
     }
 
     public ApiResponse<ExamCodeResponse> updateExamType(int id, UpdationExamCodeRequest request){
         ExamType examType = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         examType.setExamCode(request.getExamCode());
+        examTypeRepository.save(examType);
         return new ApiResponse<>(200, "Cap nhat thanh cong", examTypeMapper.toResponse(examType));
     }
 
