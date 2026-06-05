@@ -12,9 +12,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreationExamRequest {
     String name;
+
     String description;
+
     String sampleVideoUrl;
+
     String teacherId;
+
     int idExamCode;
+
     String standardData;
 }

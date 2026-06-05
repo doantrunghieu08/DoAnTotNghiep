@@ -1,5 +1,6 @@
 package com.TrungHieu.DoAnTotNgiep.DTO.Request.AuthRequest;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,5 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ForgotPasswordRequest {
     @NonNull
+    @Email
     String email;
 }

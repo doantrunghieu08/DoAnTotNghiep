@@ -2,6 +2,7 @@ package com.TrungHieu.DoAnTotNgiep.DTO.Request.AuthRequest;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @AllArgsConstructor
@@ -12,5 +13,6 @@ public class LoginRequest {
     String username;
 
     @NonNull
+    @Length(min = 6)
     String password;
 }
