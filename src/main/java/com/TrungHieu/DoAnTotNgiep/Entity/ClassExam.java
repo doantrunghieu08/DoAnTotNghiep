@@ -30,7 +30,7 @@ public class ClassExam {
     Classes classes;
 
     @ManyToOne
-    @JoinColumn(name = "exam_type_id")
+    @JoinColumn(name = "exam_id")
     Exam exam;
 
     LocalDateTime submissionDeadline;
