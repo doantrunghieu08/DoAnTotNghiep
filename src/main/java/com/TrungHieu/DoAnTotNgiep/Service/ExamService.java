@@ -115,6 +115,7 @@ public class ExamService {
 
         if (request.getSampleVideoUrl() != null && !request.getSampleVideoUrl().trim().isEmpty()) {
             exam.setSampleVideoUrl(request.getSampleVideoUrl());
+            exam.setStandardData(request.getStandardData());
         }
 
         Exam saved = examRepository.save(exam);

@@ -17,5 +17,7 @@ public class UpdationExamRequest {
 
     String sampleVideoUrl;
 
+    String standardData;
+
     int idExamType;
 }
