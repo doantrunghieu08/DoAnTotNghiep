@@ -27,5 +27,9 @@ public interface ClassRepository extends JpaRepository<Classes, String> {
 
     Page<Classes> findAllByTeacher(User user, Pageable pageable);
 
+    @Query(value = "SELECT count(c.id) as SLLop\n" +
+            "FROM classes c\n" +
+            "WHERE c.teacher_id = :idTeacher;", nativeQuery = true)
+    Long calculateTheTotalNumberOfClasses(@Param("idTeacher") String idTeacher);
 
 }

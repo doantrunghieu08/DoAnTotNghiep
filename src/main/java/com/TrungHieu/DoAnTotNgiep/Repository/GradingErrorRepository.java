@@ -28,4 +28,7 @@ public interface GradingErrorRepository extends JpaRepository<GradingError, Inte
     WHERE ge.session.id IN :sessionIds
 """)
     List<GradingError> findWithErrorTypeBySessionIdIn(@Param("sessionIds") List<Integer> sessionIds);
+
+    @Query(value = "SELECT count(error_type_id) as TongSoLoiMacPhai FROM grading_errors ge JOIN grading_sessions gs ON ge.session_id = gs.id WHERE gs.teacher_id = :idTeacher", nativeQuery = true)
+    Long calculateErrorInExam(@Param("idTeacher") String idTeacher);
 }

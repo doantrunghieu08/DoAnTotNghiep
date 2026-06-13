@@ -59,4 +59,14 @@ public interface UserRepository extends JpaRepository<User, String> {
     long countByRole(RoleType role);
 
     long countByStatus(UserStatusType status);
+
+    @Query(value = """
+    SELECT COUNT(u.id)
+    FROM users u
+    JOIN classes c ON u.class_id = c.id
+    WHERE u.role = 'STUDENT'
+      AND c.teacher_id = :idTeacher
+    """, nativeQuery = true)
+    Long calculateTheTotalNumberOfStudentByTeacher(
+            @Param("idTeacher") String idTeacher);
 }
