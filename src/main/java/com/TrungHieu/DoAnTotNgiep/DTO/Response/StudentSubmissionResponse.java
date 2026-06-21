@@ -20,6 +20,8 @@ public class StudentSubmissionResponse {
 
     int idClassExam;
 
+    String refUrl;
+
     String standardData;
 
     String idStudent;

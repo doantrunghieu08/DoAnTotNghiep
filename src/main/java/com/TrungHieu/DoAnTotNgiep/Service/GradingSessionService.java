@@ -12,10 +12,7 @@ import com.TrungHieu.DoAnTotNgiep.Enum.GradingSessionStatus;
 import com.TrungHieu.DoAnTotNgiep.Exception.AppException;
 import com.TrungHieu.DoAnTotNgiep.Exception.ErrorCode;
 import com.TrungHieu.DoAnTotNgiep.Mapper.GradingSessionMapper;
-import com.TrungHieu.DoAnTotNgiep.Repository.GradingErrorRepository;
-import com.TrungHieu.DoAnTotNgiep.Repository.GradingSessionRepository;
-import com.TrungHieu.DoAnTotNgiep.Repository.StudentSubmissionRepository;
-import com.TrungHieu.DoAnTotNgiep.Repository.UserRepository;
+import com.TrungHieu.DoAnTotNgiep.Repository.*;
 import com.cloudinary.Api;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -39,6 +36,7 @@ public class GradingSessionService {
     StudentSubmissionRepository studentSubmissionRepository;
     UserRepository userRepository;
     GradingSessionMapper gradingSessionMapper;
+    ClassExamRepository classExamRepository;
 
 
     @Transactional
@@ -48,7 +46,7 @@ public class GradingSessionService {
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         User teacher = userRepository.findById(request.getIdTeacher())
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
-
+        ClassExam classExam = classExamRepository.findById(submission.getClassExam().getId()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
 
         // 2. Kiểm tra xem đã có phiên nào cùng MODE và đang "IN_PROGRESS" chưa
         Optional<GradingSession> existingSession = gradingSessionRepository
@@ -62,8 +60,9 @@ public class GradingSessionService {
         // 3. Nếu tìm thấy, sếp trả về ngay phiên đó luôn (Vào lại phiên cũ)
         if (existingSession.isPresent()) {
             GradingSessionResponse response = gradingSessionMapper.toResponse(existingSession.get());
-            
+
             StudentSubmissionResponse studentSubmissionResponse = response.getStudentSubmissionResponse();
+            studentSubmissionResponse.setRefUrl(classExam.getExam().getSampleVideoUrl());
             studentSubmissionResponse.setStandardData(submission.getClassExam().getExam().getStandardData());
             response.setStudentSubmissionResponse(studentSubmissionResponse);
 
@@ -85,7 +84,7 @@ public class GradingSessionService {
 
         StudentSubmissionResponse studentSubmissionResponse = response.getStudentSubmissionResponse();
         studentSubmissionResponse.setStandardData(submission.getClassExam().getExam().getStandardData());
-
+        studentSubmissionResponse.setRefUrl(classExam.getExam().getSampleVideoUrl());
 
         response.setStudentSubmissionResponse(studentSubmissionResponse);
 
