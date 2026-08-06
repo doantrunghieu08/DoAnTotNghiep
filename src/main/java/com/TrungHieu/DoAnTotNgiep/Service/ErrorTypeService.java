@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ public class ErrorTypeService {
     UserRepository userRepository;
     ErrorMapper errorMapper;
 
+    @CacheEvict(value = "errors", allEntries = true)
     public ApiResponse<ErrorResponse> creationError(CreationErrorRequest request){
         User teacher = userRepository.findById(request.getIdTeacher()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         ErrorType errorType = new ErrorType();
@@ -47,6 +50,7 @@ public class ErrorTypeService {
 
     }
 
+    @Cacheable(value = "errors", key = "#idTeacher + '_' + #page + '_' + #size")
     public ApiResponse<Page<ErrorResponse>> getErrors(String idTeacher, int page, int size) {
         // 1. Kiểm tra sự tồn tại của User
         User user = userRepository.findById(idTeacher)
@@ -71,6 +75,7 @@ public class ErrorTypeService {
     }
 
     @Transactional
+    @CacheEvict(value = "errors", allEntries = true)
     public void deleteError(int id){
 
         ErrorType errorType = errorTypeRepository.findById(id)
@@ -81,6 +86,7 @@ public class ErrorTypeService {
     }
 
     @Transactional
+    @CacheEvict(value = "errors", allEntries = true)
     public void restoreError(int id){
         ErrorType errorType = errorTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));

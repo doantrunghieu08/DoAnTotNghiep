@@ -31,6 +31,8 @@ public class SecurityConfig{
     AppConfig appConfig;
 
     JwtAuthenticationFilter jwtAuthenticationFilter;
+    
+    RateLimitFilter rateLimitFilter;
 
     CustomUserDetailsService customUserDetailsService;
 
@@ -105,7 +107,10 @@ public class SecurityConfig{
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token hết hạn hoặc không hợp lệ"))
                 );
-        security.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        
+        // Thêm RateLimitFilter vào đầu chuỗi filter để chống spam
+        security.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+        security.addFilterAfter(jwtAuthenticationFilter, RateLimitFilter.class);
 
         return security.build();
     }

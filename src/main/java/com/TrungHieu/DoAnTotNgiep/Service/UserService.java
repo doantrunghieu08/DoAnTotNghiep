@@ -22,6 +22,9 @@ import com.cloudinary.Api;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +47,11 @@ public class UserService {
     PasswordEncoder encoder;
 
 
+    @Caching(evict = {
+            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "teacherList", allEntries = true)
+    })
     public ApiResponse<UserResponse> updateUser(String id, UpdateUserRequest request) {
 
         User user = userRepository.findById(id)
@@ -71,6 +79,11 @@ public class UserService {
         return new ApiResponse<>(200, "Cập nhật thành công", userMapper.toResponse(user));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userStats", allEntries = true)
+    })
     public ApiResponse<UserResponse> LockedUser(String id){
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         user.setStatus(UserStatusType.LOCKED);
@@ -79,6 +92,11 @@ public class UserService {
         return new ApiResponse<>(200, "Khóa tài khoản thành công", userResponse);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userStats", allEntries = true)
+    })
     public ApiResponse<UserResponse> unlockUser(String id){
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         user.setStatus(UserStatusType.ACTIVE);
@@ -94,6 +112,11 @@ public class UserService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "studentCount", allEntries = true),
+            @CacheEvict(value = "classByTeacher", allEntries = true)
+    })
     public ApiResponse<StudentResponse> addStudentToTheClass(AddiationStudentToTheClassRequest request) {
 
         User user = userRepository.findById(request.getIdStudent())
@@ -129,11 +152,17 @@ public class UserService {
         return new ApiResponse<>(200, "Lấy danh sách sinh viên theo lớp thành công", studentPage);
     }
 
+    @Cacheable(value = "userInfo", key = "#username")
     public ApiResponse<UserResponse> getInfo(String username){
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         return new ApiResponse<>(200, "Lấy thông tin thành công", userMapper.toResponse(user));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userStats", allEntries = true),
+            @CacheEvict(value = "studentCount", allEntries = true)
+    })
     public ApiResponse<StudentResponse> removeStudentFromClass(RemoveStudentFromClassRequest request){
         User user = userRepository.findStudentByClassIdAndId(request.getIdClass(), request.getIdStudent()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         user.setStudentClass(null);
@@ -141,6 +170,7 @@ public class UserService {
         return new ApiResponse<>(200, "Xóa sinh viên khỏi lớp thành công", userMapper.toStudentResponse(user));
     }
 
+    @Cacheable(value = "users", key = "#roleType + '_' + #page + '_' + #size")
     public ApiResponse<List<UserResponse>> getUserByRole(String roleType, int page, int size){
         Pageable pageable = PageRequest.of(page, size);
 
@@ -153,6 +183,7 @@ public class UserService {
         return new ApiResponse<>(200, "Danh sách user theo vai trò: " + roleType, userResponseList);
     }
 
+    @Cacheable(value = "teacherList")
     public ApiResponse<List<UserResponse>> getTeacherList(){
         List<UserResponse> userResponseList = userMapper.toResponseList(userRepository.findAllByRole(RoleType.TEACHER));
         return new ApiResponse<>(200, "Danh sách giáo viên", userResponseList);
@@ -178,6 +209,7 @@ public class UserService {
                 studentPage.map(userMapper::toResponse));
     }
 
+    @Cacheable(value = "userStats")
     public ApiResponse<UserDashboardResponse> getUserStatistics() {
         // 1. Đếm tổng số người dùng
         long total = userRepository.count();
@@ -199,7 +231,11 @@ public class UserService {
         return new ApiResponse<>(200, "Lấy thống kê thành công", stats);
     }
 
-    public ApiResponse<UserResponse> uploadAvatar(String id,String avatarImage){
+    @Caching(evict = {
+            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "users", allEntries = true)
+    })
+    public ApiResponse<UserResponse> uploadAvatar(String id, String avatarImage){
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         user.setAvatarImage(avatarImage);
         userRepository.save(user);

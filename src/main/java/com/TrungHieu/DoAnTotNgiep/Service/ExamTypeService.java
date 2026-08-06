@@ -14,6 +14,9 @@ import com.cloudinary.Api;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +30,7 @@ public class ExamTypeService {
     ExamTypeRepository examTypeRepository;
     ExamTypeMapper examTypeMapper;
 
+    @CacheEvict(value = {"examTypes", "examCountMap"}, allEntries = true)
     public ApiResponse<ExamCodeResponse> creationExamType(CreationExamTypeRequest request){
         ExamType examType = new ExamType();
         examType.setExamCode(request.getExamCode());
@@ -35,16 +39,19 @@ public class ExamTypeService {
         return new ApiResponse<>(200, "Thêm loại bài thi thành công", examTypeMapper.toResponse(examType));
     }
 
+    @Cacheable(value = "examTypes", key = "'active'")
     public ApiResponse<List<ExamCodeResponse>> getExamTypes(){
         List<ExamType> examTypes = examTypeRepository.findByIsDeletedFalse();
         return new ApiResponse<>(200, "Danh sach loai bai thi", examTypeMapper.toResponseList(examTypes));
     }
 
+    @Cacheable(value = "examTypes", key = "'deleted'")
     public ApiResponse<List<ExamCodeResponse>> getExamTypesIsDeleteTrue(){
         List<ExamType> examTypes = examTypeRepository.findByIsDeletedTrue();
         return new ApiResponse<>(200, "Danh sach loai bai thi da xoa", examTypeMapper.toResponseList(examTypes));
     }
 
+    @CacheEvict(value = {"examTypes", "examCountMap"}, allEntries = true)
     public ApiResponse<ExamCodeResponse> restoreExamType(int id){
         ExamType examType = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         if (examType.isDeleted() == false){
@@ -55,6 +62,7 @@ public class ExamTypeService {
         return new ApiResponse<>(200, "Khoi phuc thanh cong", examTypeMapper.toResponse(examType));
     }
 
+    @CacheEvict(value = {"examTypes", "examCountMap"}, allEntries = true)
     public ApiResponse<ExamCodeResponse> deleteExamType(int id){
         ExamType examType = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         if (examType.isDeleted() == true){
@@ -65,6 +73,7 @@ public class ExamTypeService {
         return new ApiResponse<>(200, "Xóa thành công", examTypeMapper.toResponse(examType));
     }
 
+    @CacheEvict(value = {"examTypes", "examCountMap"}, allEntries = true)
     public ApiResponse<ExamCodeResponse> updateExamType(int id, UpdationExamCodeRequest request){
         ExamType examType = examTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         examType.setExamCode(request.getExamCode());
@@ -72,10 +81,11 @@ public class ExamTypeService {
         return new ApiResponse<>(200, "Cap nhat thanh cong", examTypeMapper.toResponse(examType));
     }
 
+    @Cacheable(value = "examCountMap")
     public ApiResponse<Map<String, Integer>> getExamCountMap(){
         List<Map<String, Object>> rows = examTypeRepository.countExamByExamCode();
 
-        return new ApiResponse<>(200, "Lấy số lượng thành công",rows.stream().collect(Collectors.toMap(
+        return new ApiResponse<>(200, "Lấy số lượng thành công", rows.stream().collect(Collectors.toMap(
                 row -> (String) row.get("exam_code"),
                 row -> ((Number) row.get("SLBaiThi")).intValue()
         )));

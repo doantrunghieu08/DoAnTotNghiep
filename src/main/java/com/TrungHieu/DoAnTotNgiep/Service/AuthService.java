@@ -170,7 +170,8 @@ public class AuthService {
         return new ApiResponse<>(200, "Danh sách người dùng", userResponseList);
     }
 
-    public String createRefreshToken(User user) {
+    public String createRefreshToken(User user) 
+    {
         refreshTokenRepository.deleteByUser(user);
 
         String token = UUID.randomUUID().toString();
@@ -183,6 +184,7 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
         return token;
     }
+    
     public ApiResponse<String> refreshAccessToken(String requestToken) {
         return refreshTokenRepository.findByToken(requestToken)
                 .map(token -> {

@@ -23,6 +23,9 @@ spring:
         page-parameter-name: page
         size-parameter-name: size
       page-serialization-mode: via-dto
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
 
   datasource:
     # URL kết nối tới service mysql trong docker
@@ -70,6 +73,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
 
 logging:
   level:

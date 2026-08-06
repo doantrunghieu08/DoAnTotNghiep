@@ -25,7 +25,9 @@ public class ErrorTypeController {
     }
 
     @GetMapping("/api/teacher/error/{idTeacher}")
-    public ResponseEntity<ApiResponse<Page<ErrorResponse>>> getErrors(@PathVariable String idTeacher, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")int size){
+    public ResponseEntity<ApiResponse<Page<ErrorResponse>>> getErrors(@PathVariable String idTeacher,
+                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "10")int size){
         return ResponseEntity.ok(errorTypeService.getErrors(idTeacher, page, size));
     }
 

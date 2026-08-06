@@ -19,6 +19,8 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ public class ExamService {
     ClassRepository classRepository;
     ExamTypeRepository examTypeRepository;
 
+    @Cacheable(value = "exams", key = "#idTeacher + '_' + #page + '_' + #size")
     public ApiResponse<Page<ExamTypeResponse>> getAllExamByTeacherId(String idTeacher, int page, int size) {
 
         User user = userRepository.findById(idTeacher)
@@ -59,6 +62,7 @@ public class ExamService {
         return new ApiResponse<>(200, "Danh sách bài thi của giáo viên: " + user.getFullName(), examTypeResponses);
     }
 
+    @CacheEvict(value = {"exams", "examCountMap"}, allEntries = true)
     public ApiResponse<ExamTypeResponse> creationExam(CreationExamRequest request){
         Exam exam = new Exam();
         User teacher = userRepository.findById(request.getTeacherId()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -79,6 +83,7 @@ public class ExamService {
 
 
     @Transactional
+    @CacheEvict(value = "exams", allEntries = true)
     public void deleteExam(int id){
         Exam exam = examRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setDeleted(true);
@@ -86,6 +91,7 @@ public class ExamService {
     }
 
     @Transactional
+    @CacheEvict(value = "exams", allEntries = true)
     public void restoreExam(int id){
         Exam exam = examRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         exam.setDeleted(false);
@@ -93,6 +99,7 @@ public class ExamService {
     }
 
     @Transactional
+    @CacheEvict(value = "exams", allEntries = true)
     public ApiResponse<ExamTypeResponse> updateExam(int idExam, UpdationExamRequest request){
         Exam exam = examRepository.findById(idExam)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));

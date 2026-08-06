@@ -26,7 +26,10 @@ public class ClassExamController {
     }
 
     @GetMapping("/public/exam/class/{idClass}")
-    public ResponseEntity<ApiResponse<Page<ExamResponse>>> getExamByClassId(@PathVariable String idClass, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+    public ResponseEntity<ApiResponse<Page<ExamResponse>>> getExamByClassId(@PathVariable String idClass,
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "5") int size)
+    {
         return ResponseEntity.ok(classExamService.getExamByClassId(idClass, page, size));
     }
 
@@ -34,7 +37,6 @@ public class ClassExamController {
     public ResponseEntity<ApiResponse<String>> deletedExamFromClass(
             @RequestParam String idClass,
             @RequestParam int idExam) {
-
         classExamService.deletedExam(idClass, idExam);
 
         // Trả về 200 OK kèm Message để Frontend dễ xử lý

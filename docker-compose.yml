@@ -14,6 +14,13 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  redis-doantotnghiep:
+    image: redis:7.2
+    container_name: redis_be
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
   spring-be:
     build:
       context: .
@@ -24,6 +31,7 @@ services:
 
     depends_on:
       - db-doantotnghiep
+      - redis-doantotnghiep
 
     ports:
       - "8080:8080"
@@ -32,6 +40,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Doanhieu@1
+      
+      SPRING_DATA_REDIS_HOST: redis-doantotnghiep
+      SPRING_DATA_REDIS_PORT: 6379
 
       JWT_SIGNER_KEY: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 

@@ -19,7 +19,9 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping("/api/exam/teacher/{idTeacher}")
-    public ResponseEntity<ApiResponse<Page<ExamTypeResponse>>> getExamTypesByTeacherId(@PathVariable String idTeacher, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "9") int size){
+    public ResponseEntity<ApiResponse<Page<ExamTypeResponse>>> getExamTypesByTeacherId(@PathVariable String idTeacher,
+                                                                                       @RequestParam(defaultValue = "0")int page,
+                                                                                       @RequestParam(defaultValue = "9") int size){
         return ResponseEntity.ok(examService.getAllExamByTeacherId(idTeacher,page, size));
     }
 
@@ -41,7 +43,8 @@ public class ExamController {
     }
 
     @PutMapping("/api/teacher/update-exam/{idExam}")
-    public ResponseEntity<ApiResponse<ExamTypeResponse>> updateExam(@PathVariable int idExam,@RequestBody UpdationExamRequest request){
+    public ResponseEntity<ApiResponse<ExamTypeResponse>> updateExam(@PathVariable int idExam,
+                                                                    @RequestBody UpdationExamRequest request){
         ApiResponse<ExamTypeResponse> apiResponse = examService.updateExam(idExam, request);
         return ResponseEntity.ok(apiResponse);
     }

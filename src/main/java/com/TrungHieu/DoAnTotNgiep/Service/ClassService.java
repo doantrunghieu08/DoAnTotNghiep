@@ -24,6 +24,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +50,7 @@ public class ClassService {
     ClassMapper classMapper;
     UserRepository userRepository;
 
+    @CacheEvict(value = "classes", allEntries = true)
     public ApiResponse<ClassResponse> createClass(CreationClassRequest request){
         Classes classes = new Classes();
 
@@ -68,6 +72,7 @@ public class ClassService {
         return new ApiResponse<>(201, "Thêm lớp học thành công", classResponse);
     }
 
+    @Cacheable(value = "classes", key = "#page + '_' + #size")
     public ApiResponse<Page<ClassResponse>> getClassList(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
 
@@ -80,6 +85,10 @@ public class ClassService {
         return new ApiResponse<>(200, "Lấy danh sách lớp thành công", classResponses);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "classes", allEntries = true),
+            @CacheEvict(value = "classByTeacher", allEntries = true)
+    })
     public ApiResponse<ClassResponse> teachingAssignment(TeachingAssignmentRequest request){
         Classes classes = classRepository.findById(request.getIdClass()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         User user = userRepository.findById(request.getIdTeacher()).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -92,7 +101,11 @@ public class ClassService {
         return new ApiResponse<>(200, "Phân công giảng viên thành công", classResponse);
     }
 
-    public ApiResponse<ClassResponse> updateClass(String id,UpdationClassRequest request){
+    @Caching(evict = {
+            @CacheEvict(value = "classes", allEntries = true),
+            @CacheEvict(value = "classByTeacher", allEntries = true)
+    })
+    public ApiResponse<ClassResponse> updateClass(String id, UpdationClassRequest request){
         Classes classes = classRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         classes.setClassName(request.getClassName());
         classes.setSemester(request.getSemester());
@@ -104,6 +117,7 @@ public class ClassService {
     }
 
 
+    @Cacheable(value = "studentCount")
     public ApiResponse<Map<String, Long>> getStudentCountPerClass() {
         List<Object[]> results = classRepository.countStudentsByClassId();
 
@@ -118,6 +132,7 @@ public class ClassService {
     }
 
     @Transactional
+    @CacheEvict(value = {"classes", "studentCount"}, allEntries = true)
     public List<String> importStudentsToClass(MultipartFile file, String classId) {
         DataFormatter formatter = new DataFormatter();
         List<String> errors = new ArrayList<>();
@@ -162,12 +177,14 @@ public class ClassService {
         return errors;
     }
 
+    @CacheEvict(value = {"classes", "classByTeacher", "studentCount"}, allEntries = true)
     public ApiResponse<ClassResponse> removeClass(String id){
         Classes classes = classRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
         classRepository.delete(classes);
         return new ApiResponse<>(200, "Xóa lớp thành công", classMapper.toResponse(classes));
     }
 
+    @Cacheable(value = "classByTeacher", key = "#id + '_' + #page + '_' + #size")
     public ApiResponse<Page<ClassResponse>> getClassesByTeacher(String id, int page, int size) {
 
         User user = userRepository.findById(id)

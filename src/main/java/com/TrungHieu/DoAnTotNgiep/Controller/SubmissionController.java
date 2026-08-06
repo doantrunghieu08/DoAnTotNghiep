@@ -2,7 +2,6 @@ package com.TrungHieu.DoAnTotNgiep.Controller;
 
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.StudentSubmissionRequest.CreationSubmissionRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.*;
-import com.TrungHieu.DoAnTotNgiep.Service.AiIntegrationService;
 import com.TrungHieu.DoAnTotNgiep.Service.StudentSubmissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubmissionController {
     StudentSubmissionService studentSubmissionService;
-    AiIntegrationService aiIntegrationService;
+
 
     @PostMapping("/student/submission")
     public ResponseEntity<ApiResponse<StudentSubmissionResponse>> creationSubmission(@RequestBody CreationSubmissionRequest request){
@@ -65,19 +64,6 @@ public class SubmissionController {
     @GetMapping("/student/my-exam/{idStudent}")
     public ResponseEntity<ApiResponse<Page<SubmissionGradeDTO>>> getMyExam(@PathVariable String idStudent, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         return ResponseEntity.ok(studentSubmissionService.getMyExams(idStudent, page, size));
-    }
-
-    @PostMapping("/teacher/grade")
-    public ResponseEntity<AiGradeResponse> gradeStudentVideo(
-            @RequestParam String idTeacher,
-            @RequestParam int idClassExam,
-            @RequestParam String videoUrl
-    ) {
-        // Gọi sang trạm AI local qua dịch vụ Service bạn vừa viết
-        AiGradeResponse aiResultJson = aiIntegrationService.callPythonAiService(idTeacher, idClassExam,videoUrl);
-
-        // Trả chuỗi JSON nhận xét + điểm số từ AI về lại cho Client hiển thị/kiểm thử
-        return ResponseEntity.ok(aiResultJson);
     }
 
     @PostMapping("/teacher/submission/upload-video")
