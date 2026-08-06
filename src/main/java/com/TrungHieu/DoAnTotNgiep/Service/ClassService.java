@@ -5,6 +5,7 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ClassRequest.TeachingAssignmentReq
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ClassRequest.UpdationClassRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ClassResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.PagedResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.UserResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.Classes;
 import com.TrungHieu.DoAnTotNgiep.Entity.User;
@@ -73,14 +74,14 @@ public class ClassService {
     }
 
     @Cacheable(value = "classes", key = "#page + '_' + #size")
-    public ApiResponse<Page<ClassResponse>> getClassList(int page, int size){
+    public ApiResponse<PagedResponse<ClassResponse>> getClassList(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
 
         // Lấy dữ liệu phân trang từ DB
         Page<Classes> classesPage = classRepository.findAll(pageable);
 
-        // Dùng .map() của Page để chuyển sang DTO mà KHÔNG dùng .getContent()
-        Page<ClassResponse> classResponses = classesPage.map(classMapper::toResponse);
+        // Chuyển sang PagedResponse để Jackson có thể serialize vào Redis
+        PagedResponse<ClassResponse> classResponses = PagedResponse.of(classesPage.map(classMapper::toResponse));
 
         return new ApiResponse<>(200, "Lấy danh sách lớp thành công", classResponses);
     }
@@ -185,7 +186,7 @@ public class ClassService {
     }
 
     @Cacheable(value = "classByTeacher", key = "#id + '_' + #page + '_' + #size")
-    public ApiResponse<Page<ClassResponse>> getClassesByTeacher(String id, int page, int size) {
+    public ApiResponse<PagedResponse<ClassResponse>> getClassesByTeacher(String id, int page, int size) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -200,7 +201,8 @@ public class ClassService {
 
         Page<Classes> classesPage = classRepository.findAllByTeacher(user, pageable);
 
-        Page<ClassResponse> classResponses = classesPage.map(classMapper::toResponse);
+        // Chuyển sang PagedResponse để Jackson có thể serialize vào Redis
+        PagedResponse<ClassResponse> classResponses = PagedResponse.of(classesPage.map(classMapper::toResponse));
 
         return new ApiResponse<>(200, "Danh sách lớp theo giáo viên thành công", classResponses);
     }

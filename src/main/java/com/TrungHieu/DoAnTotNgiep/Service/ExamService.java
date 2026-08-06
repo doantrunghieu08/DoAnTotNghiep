@@ -4,6 +4,7 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.CreationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.UpdationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamTypeResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.PagedResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.Exam;
 import com.TrungHieu.DoAnTotNgiep.Entity.ExamType;
 import com.TrungHieu.DoAnTotNgiep.Entity.User;
@@ -40,7 +41,7 @@ public class ExamService {
     ExamTypeRepository examTypeRepository;
 
     @Cacheable(value = "exams", key = "#idTeacher + '_' + #page + '_' + #size")
-    public ApiResponse<Page<ExamTypeResponse>> getAllExamByTeacherId(String idTeacher, int page, int size) {
+    public ApiResponse<PagedResponse<ExamTypeResponse>> getAllExamByTeacherId(String idTeacher, int page, int size) {
 
         User user = userRepository.findById(idTeacher)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -56,8 +57,8 @@ public class ExamService {
 
         Page<Exam> examTypePage = examRepository.findAllByTeacher(user, pageable);
 
-
-        Page<ExamTypeResponse> examTypeResponses = examTypePage.map(examMapper::toResponse);
+        // Chuyển sang PagedResponse để Jackson có thể serialize vào Redis
+        PagedResponse<ExamTypeResponse> examTypeResponses = PagedResponse.of(examTypePage.map(examMapper::toResponse));
 
         return new ApiResponse<>(200, "Danh sách bài thi của giáo viên: " + user.getFullName(), examTypeResponses);
     }

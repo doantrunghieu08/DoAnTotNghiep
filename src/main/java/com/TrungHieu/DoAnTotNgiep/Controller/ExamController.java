@@ -4,11 +4,11 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.CreationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ExamRequest.UpdationExamRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ExamTypeResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.PagedResponse;
 import com.TrungHieu.DoAnTotNgiep.Service.ExamService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping("/api/exam/teacher/{idTeacher}")
-    public ResponseEntity<ApiResponse<Page<ExamTypeResponse>>> getExamTypesByTeacherId(@PathVariable String idTeacher,
+    public ResponseEntity<ApiResponse<PagedResponse<ExamTypeResponse>>> getExamTypesByTeacherId(@PathVariable String idTeacher,
                                                                                        @RequestParam(defaultValue = "0")int page,
                                                                                        @RequestParam(defaultValue = "9") int size){
         return ResponseEntity.ok(examService.getAllExamByTeacherId(idTeacher,page, size));

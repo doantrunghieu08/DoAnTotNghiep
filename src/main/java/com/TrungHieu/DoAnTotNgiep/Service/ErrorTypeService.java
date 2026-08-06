@@ -3,6 +3,7 @@ package com.TrungHieu.DoAnTotNgiep.Service;
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ErrorRequest.CreationErrorRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ErrorResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.PagedResponse;
 import com.TrungHieu.DoAnTotNgiep.Entity.ErrorType;
 import com.TrungHieu.DoAnTotNgiep.Entity.User;
 import com.TrungHieu.DoAnTotNgiep.Enum.RoleType;
@@ -51,7 +52,7 @@ public class ErrorTypeService {
     }
 
     @Cacheable(value = "errors", key = "#idTeacher + '_' + #page + '_' + #size")
-    public ApiResponse<Page<ErrorResponse>> getErrors(String idTeacher, int page, int size) {
+    public ApiResponse<PagedResponse<ErrorResponse>> getErrors(String idTeacher, int page, int size) {
         // 1. Kiểm tra sự tồn tại của User
         User user = userRepository.findById(idTeacher)
                 .orElseThrow(() -> new AppException(ErrorCode.DATA_NOT_FOUND));
@@ -67,9 +68,8 @@ public class ErrorTypeService {
         // 4. Lấy dữ liệu phân trang
         Page<ErrorType> errorTypePage = errorTypeRepository.findAllByTeacher(user, pageable);
 
-        // 5. Chuyển đổi sang Response DTO bằng Map (giữ nguyên cấu trúc Page)
-        Page<ErrorResponse> errorResponses = errorTypePage.map(errorMapper::toResponse);
-
+        // 5. Chuyển sang PagedResponse để Jackson có thể serialize vào Redis
+        PagedResponse<ErrorResponse> errorResponses = PagedResponse.of(errorTypePage.map(errorMapper::toResponse));
 
         return new ApiResponse<>(200, "Lấy danh sách lỗi thành công", errorResponses);
     }

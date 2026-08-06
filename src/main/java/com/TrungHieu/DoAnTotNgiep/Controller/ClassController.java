@@ -5,13 +5,13 @@ import com.TrungHieu.DoAnTotNgiep.DTO.Request.ClassRequest.TeachingAssignmentReq
 import com.TrungHieu.DoAnTotNgiep.DTO.Request.ClassRequest.UpdationClassRequest;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ApiResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.ClassResponse;
+import com.TrungHieu.DoAnTotNgiep.DTO.Response.PagedResponse;
 import com.TrungHieu.DoAnTotNgiep.DTO.Response.UserResponse;
 import com.TrungHieu.DoAnTotNgiep.Service.ClassService;
 import com.TrungHieu.DoAnTotNgiep.Service.ExcelService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class ClassController {
     }
 
     @GetMapping("/admin/api/class")
-    public ResponseEntity<ApiResponse<Page<ClassResponse>>> getClassList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size){
+    public ResponseEntity<ApiResponse<PagedResponse<ClassResponse>>> getClassList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size){
         return ResponseEntity.ok(classService.getClassList(page,size));
     }
 
@@ -80,7 +80,7 @@ public class ClassController {
     }
 
     @GetMapping("/teacher/api/class/{id}")
-    public ResponseEntity<ApiResponse<Page<ClassResponse>>> getClassesByTeacher(@PathVariable String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8")int size){
+    public ResponseEntity<ApiResponse<PagedResponse<ClassResponse>>> getClassesByTeacher(@PathVariable String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8")int size){
         return ResponseEntity.ok(classService.getClassesByTeacher(id, page, size));
     }
 
