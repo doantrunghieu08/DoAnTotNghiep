@@ -48,7 +48,7 @@ public class UserService {
 
 
     @Caching(evict = {
-            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "userInfo", allEntries = true),
             @CacheEvict(value = "users", allEntries = true),
             @CacheEvict(value = "teacherList", allEntries = true)
     })
@@ -80,7 +80,7 @@ public class UserService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "userInfo", allEntries = true),
             @CacheEvict(value = "users", allEntries = true),
             @CacheEvict(value = "userStats", allEntries = true)
     })
@@ -93,7 +93,7 @@ public class UserService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "userInfo", allEntries = true),
             @CacheEvict(value = "users", allEntries = true),
             @CacheEvict(value = "userStats", allEntries = true)
     })
@@ -232,7 +232,7 @@ public class UserService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "userInfo", key = "#id"),
+            @CacheEvict(value = "userInfo", allEntries = true),
             @CacheEvict(value = "users", allEntries = true)
     })
     public ApiResponse<UserResponse> uploadAvatar(String id, String avatarImage){
