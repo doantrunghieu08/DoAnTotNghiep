@@ -55,7 +55,8 @@ public class SecurityConfig{
                 "http://localhost:5500",
                 "http://localhost:3000",
                 "http://103.75.182.246",        // Cổng mặc định của Nginx (80)
-                "http://103.75.182.246:8080"
+                "http://103.75.182.246:8080",
+                "http://160.191.46.107:8081"
         ));
         configuration.setAllowedHeaders(List.of(
                 "Authorization", "Content-Type", "X-Requested-With", "Accept", "X-XSRF-TOKEN"
