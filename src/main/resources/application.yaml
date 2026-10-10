@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   error:
     include-message: always
     include-binding-errors: always
@@ -12,7 +12,7 @@ server:
     accept-count: 100
 
 jwt:
-  signerKey: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+  signerKey: ${JWT_SIGNER_KEY:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
   expiration: 43200000
   refresh-token-expiration: 604800000
 
@@ -28,10 +28,10 @@ spring:
       port: ${SPRING_DATA_REDIS_PORT:6379}
 
   datasource:
-    # URL kết nối tới service mysql trong docker
-    url: jdbc:mysql://db-doantotnghiep:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
-    username: root
-    password: Doanhieu@1
+    # URL kết nối tới service mysql (mặc định trỏ localhost cho dev, docker tự override)
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/kbvaamfl_DoAnTotNgiep?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:Doanhieu@1}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 30
@@ -48,32 +48,28 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
 
   jpa:
-    # Dùng update để Hibernate tự tạo/cập nhật bảng
     hibernate:
       ddl-auto: none
     show-sql: false
     properties:
       hibernate:
-        # Hibernate 6 tự động chọn dialect, không cần khai báo để tránh lỗi deprecated
         jdbc:
           lob:
             non_contextual_creation: true
         boot:
-          # Cho phép Hibernate đọc metadata từ database để tránh treo
           allow_jdbc_metadata_access: true
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: hotro.booingfilmticket@gmail.com
-    password: rvsvidqahczqbgep
+    username: ${MAIL_USERNAME:hotro.booingfilmticket@gmail.com}
+    password: ${MAIL_PASSWORD:rvsvidqahczqbgep}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-
 
 logging:
   level:
@@ -83,6 +79,6 @@ logging:
     org.hibernate.orm.jdbc.connections: DEBUG
 
 cloudinary:
-  cloud-name: dzmepj5y8
-  api-key: 699318649326949
-  api-secret: PSNSslVt2Q6UdgLVh7WICK_vaxs
+  cloud-name: ${CLOUDINARY_NAME:dzmepj5y8}
+  api-key: ${CLOUDINARY_API_KEY:699318649326949}
+  api-secret: ${CLOUDINARY_API_SECRET:PSNSslVt2Q6UdgLVh7WICK_vaxs}
