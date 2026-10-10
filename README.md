@@ -423,4 +423,3 @@ mvnw.cmd spring-boot:run
 
 ---
 
-*⭐ Nếu bạn thấy dự án hữu ích, hãy để lại 1 Star trên GitHub nhé!*
